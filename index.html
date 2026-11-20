@@ -352,7 +352,7 @@ tr.mrefr>td{padding-top:0!important}
       <div class="fubar" id="fuBar"></div>
       <div class="tbar">
         <div class="hint" style="margin:0" id="fuInfo"></div>
-        <div style="display:flex;gap:8px"><button class="btn" id="fuReset" title="Hapus semua filter">✕ Hapus filter</button><button class="btn wav" id="fuWa"><span class="wai"></span>WA Vendor</button><button class="btn" id="fuCopy">⬇ Unduh Excel</button></div>
+        <div style="display:flex;gap:8px"><button class="btn" id="fuReset" title="Hapus semua filter">✕ Hapus filter</button><select class="wamode" title="Pilih cara membuka chat WhatsApp di laptop ini"><option value="web">WA: WhatsApp Web</option><option value="app">WA: Aplikasi WhatsApp</option></select><button class="btn wav" id="fuWa"><span class="wai"></span>WA Vendor</button><button class="btn" id="fuCopy">⬇ Unduh Excel</button></div>
       </div>
       <div class="tblwrap"><table class="dt" id="fuTbl"></table></div>
     </div>
@@ -372,7 +372,7 @@ tr.mrefr>td{padding-top:0!important}
       <div class="tbar">
         <div class="hint" style="margin:0">Klik baris untuk lihat detail item, PO dan TR.</div>
         <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn" id="btnCopy">⬇ Unduh Excel</button>
+          <select class="wamode" title="Pilih cara membuka chat WhatsApp di laptop ini"><option value="web">WA: WhatsApp Web</option><option value="app">WA: Aplikasi WhatsApp</option></select><button class="btn" id="btnCopy">⬇ Unduh Excel</button>
           <div class="pager"><button class="btn" id="pPrev">‹</button><span id="pInfo"></span><button class="btn" id="pNext">›</button></div>
         </div>
       </div>
@@ -1377,5 +1377,24 @@ pinUI();loadShared();
 var lastLoad=Date.now();document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&Date.now()-lastLoad>60000){lastLoad=Date.now();loadShared()}});
 })();
 </script>
-</body>
+<style>.wamode{font:inherit;font-size:12.5px;font-weight:600;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--fg);min-width:0;width:auto;max-width:none;cursor:pointer}.nowa .wamode{display:none}</style><script>
+(function(){
+  var K="m10_wa_mode";
+  function get(){try{return localStorage.getItem(K)==="app"?"app":"web"}catch(e){return "web"}}
+  function set(v){try{localStorage.setItem(K,v)}catch(e){}}
+  var mob=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent||"");
+  if(mob)document.documentElement.classList.add("nowa");
+  function sync(){document.querySelectorAll("select.wamode").forEach(function(x){x.value=get()})}
+  document.addEventListener("change",function(e){var t=e.target;if(t&&t.classList&&t.classList.contains("wamode")){set(t.value);sync();
+    if(typeof toast==="function")toast(t.value==="app"?"Tombol WA akan membuka aplikasi WhatsApp Desktop (pastikan sudah terpasang dan login).":"Tombol WA akan membuka WhatsApp Web.")}},true);
+  document.addEventListener("click",function(e){
+    if(mob||get()!=="app")return;
+    var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a)return;
+    var h=a.getAttribute("href")||"",m=h.match(/^https:\/\/web\.whatsapp\.com\/send\?(.*)$/);if(!m)return;
+    a.setAttribute("href","whatsapp://send?"+m[1]);a.removeAttribute("target");
+    setTimeout(function(){a.setAttribute("href",h);a.setAttribute("target","wa_m10")},800);
+  },true);
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",sync);else sync();
+})();
+</script></body>
 </html>
