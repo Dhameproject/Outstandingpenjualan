@@ -345,11 +345,68 @@ tr.mrefr>td{padding-top:0!important}
   .fudays{grid-template-columns:repeat(4,1fr)!important}
   .mfp{left:8px!important;right:8px!important;width:auto!important;max-width:none!important}
 }
+
+body.locked .wrap,body.locked .tip{display:none!important}
+.lgov{position:fixed;inset:0;z-index:200;background:linear-gradient(135deg,#0d3b47,#145a68 55%,#1b6f7f);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.lgov[hidden]{display:none!important}
+#uDlg{background:rgba(15,30,40,.5)}
+.lgbox{background:#fff;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);width:100%;max-width:380px;padding:26px 24px 20px;display:flex;flex-direction:column;gap:12px}
+.lgbox.ud{max-width:440px}
+.lgtag{font-size:10.5px;font-weight:800;letter-spacing:.06em;color:var(--navy,#0f4c5c)}
+.lgbox h1{margin:0;font-size:22px;line-height:1.2;color:var(--navy,#0f4c5c)}
+.lgbox h2{margin:0;font-size:18px;color:var(--navy,#0f4c5c)}
+.lgsub{margin:-4px 0 4px;font-size:13px;color:var(--fg3,#6b7a86)}
+.lgbox label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:var(--fg2,#44525e)}
+.lgbox input[type=text],.lgbox input:not([type]),.lgbox input[type=password],.lgbox select{font:inherit;font-size:15px;font-weight:500;padding:10px 12px;border:1px solid var(--line,#d5dde5);border-radius:10px;background:#fff;color:var(--fg,#1d2730);width:100%;box-sizing:border-box}
+.lgbox input:focus,.lgbox select:focus{outline:2px solid #7fb6c2;border-color:#5a9aa8}
+.lgbox input[readonly]{background:#f2f5f7;color:var(--fg3,#6b7a86)}
+.lgbox label.chk{flex-direction:row;align-items:center;gap:8px;font-weight:500;font-size:13px}
+.pwr{position:relative;display:block}.pwr input{padding-right:42px!important}
+.pwr .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;cursor:pointer;font-size:16px;opacity:.55;padding:4px 6px}
+.lgerr{color:var(--crit,#c0392b);font-size:12.5px;min-height:16px;font-weight:600}
+.lgbtn{width:100%;justify-content:center;padding:11px!important;font-size:15px!important}
+.lgfoot{font-size:11.5px;color:var(--fg3,#6b7a86);text-align:center}
+.udbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.ubar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ubar .who{background:rgba(255,255,255,.16);color:#fff;border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:700}
+.ubar .who .rl{font-weight:600;opacity:.85;margin-left:6px;font-size:11.5px}
+.ubar button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.ubar button:hover{background:rgba(255,255,255,.25)}
+#tabUsr[hidden],.tab[hidden]{display:none!important}
+body.v-usr #sum,body.v-usr .bar{display:none!important}
+body.role-viewer .uplbox{display:none!important}
+.utbl{width:100%;border-collapse:collapse;font-size:13px}
+.utbl th{background:var(--navy,#0f4c5c);color:#fff;text-align:left;padding:9px 10px;font-size:11.5px;letter-spacing:.03em;text-transform:uppercase}
+.utbl td{padding:9px 10px;border-bottom:1px solid var(--line,#e3e8ec);vertical-align:middle}
+.utbl tr.off td{color:var(--fg3,#8895a0)}
+.rb{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:800}
+.rb.admin{background:#fde8d8;color:#a0480f}.rb.editor{background:#dff1e6;color:#1d7a45}.rb.viewer{background:#e4edf7;color:#2c5d93}
+.ust{font-size:12px;font-weight:700}.ust.on{color:#1d7a45}.ust.off{color:#a33}
+.uact{display:flex;gap:6px;flex-wrap:wrap}.uact .btn{padding:5px 10px;font-size:12px}
+.uhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.urole{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 14px}
+.urole div{border:1px solid var(--line,#e3e8ec);border-radius:10px;padding:8px 10px;font-size:12px;color:var(--fg2,#44525e)}
+.urole b{display:block;margin-bottom:2px}
+@media(max-width:700px){.urole{grid-template-columns:1fr}.utbl thead{display:none}.utbl tr{display:block;border:1px solid var(--line,#e3e8ec);border-radius:12px;margin-bottom:10px;padding:6px 4px}.utbl td{display:flex;justify-content:space-between;gap:10px;border:0;padding:5px 10px}.utbl td::before{content:attr(data-l);font-size:11px;font-weight:700;color:var(--fg3,#6b7a86);text-transform:uppercase}}
 </style>
 </head>
-<body>
+<body class="locked">
+<div id="loginOv" class="lgov" hidden>
+  <form class="lgbox" id="lgForm" autocomplete="on" novalidate>
+    <div class="lgtag">10005 - MITRA10 PERCETAKAN NEGARA</div>
+    <h1>Kontrol Outstanding Penjualan</h1>
+    <p class="lgsub" id="lgSub">Masuk dengan akun Anda untuk melihat data.</p>
+    <label>Username<input id="lgUser" name="username" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+    <label>Password<span class="pwr"><input id="lgPass" name="password" type="password" autocomplete="current-password"><button type="button" class="eye" data-for="lgPass" aria-label="Tampilkan password">👁</button></span></label>
+    <label class="chk"><input type="checkbox" id="lgRem"> Ingat saya di perangkat ini (30 hari)</label>
+    <div class="lgerr" id="lgErr"></div>
+    <button class="btn on lgbtn" id="lgBtn" type="submit">Masuk</button>
+    <div class="lgfoot">Belum punya akun atau lupa password? Hubungi Administrator.</div>
+  </form>
+</div>
+<div id="uDlg" class="lgov" hidden><div class="lgbox ud" id="uDlgBox"></div></div>
 <div class="wrap">
-  <header class="hero"><div><div class="storetag">10005 - MITRA10 PERCETAKAN NEGARA</div><h1>Kontrol Outstanding Penjualan</h1><p>Monitoring OTS NP · PO · TR · Stok NAV &amp; WMS · Follow up customer &amp; vendor</p><div class="byline">Created by <b>Ravika Pramesditiya</b></div></div><div class="tagrow"><span>OTS NP</span><span>PO</span><span>TR</span><span>STOK</span><span>FOLLOW UP</span></div></header>
+  <header class="hero"><div><div class="storetag">10005 - MITRA10 PERCETAKAN NEGARA</div><h1>Kontrol Outstanding Penjualan</h1><p>Monitoring OTS NP · PO · TR · Stok NAV &amp; WMS · Follow up customer &amp; vendor</p><div class="byline">Created by <b>Ravika Pramesditiya</b></div><div class="ubar" id="uBar"></div></div><div class="tagrow"><span>OTS NP</span><span>PO</span><span>TR</span><span>STOK</span><span>FOLLOW UP</span></div></header>
   <div class="srcrow">
     <div class="srccard" id="cardOTS"></div>
     <div class="srccard" id="cardPO"></div>
@@ -360,7 +417,6 @@ tr.mrefr>td{padding-top:0!important}
     <div class="uplbox">
       <input type="file" id="file" accept=".xlsx,.xls" multiple hidden>
       <button class="btn on" id="btnUpl">⬆ Upload Data</button>
-      <button class="btn" id="btnPin" type="button">🔒 PIN edit</button>
       <span style="font-size:11px;color:var(--fg3);max-width:230px">Bisa pilih beberapa file sekaligus: Outstanding NP, Report PO By Date, Transfer Request Status Detail, Inventory Movement (stok NAV), Report Stock Warehouse By Location (stok WMS), List PIC Supplier. Jenis file dikenali otomatis.</span>
       <span id="uplMsg"></span>
     </div>
@@ -376,6 +432,7 @@ tr.mrefr>td{padding-top:0!important}
     <button class="tab on" id="tabMain"><span class="ic">📈</span><span><div class="t">Dashboard utama</div><div class="s">Ringkasan per bulan</div></span></button>
     <button class="tab" id="tabDet"><span class="ic">▦</span><span><div class="t">Detail NP</div><div class="s" id="tabDetS">– NP</div></span></button>
     <button class="tab" id="tabFU"><span class="ic">☎</span><span><div class="t">Follow Up Terjual</div><div class="s" id="tabFUS">H-1 sampai H-7</div></span></button>
+    <button class="tab" id="tabUsr" type="button" hidden><span class="ic">👥</span><span><div class="t">Maintenance User</div><div class="s">Khusus Administrator</div></span></button>
     <button class="btn capbtn" id="tabCap" type="button" title="Capture halaman yang sedang dibuka jadi gambar">📷 Capture</button>
   </div>
 
@@ -431,16 +488,16 @@ tr.mrefr>td{padding-top:0!important}
       <div class="tblwrap"><table class="dt" id="tbl"></table></div>
     </div>
   </div>
+  <div id="viewUsr" hidden>
+    <div class="card">
+      <div class="uhead"><div><h2 style="margin:0">Maintenance User</h2><div class="hint" id="usrInfo" style="margin:4px 0 0"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><input type="search" id="usrQ" placeholder="Cari username / nama" style="font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;min-width:200px"><button class="btn on" id="usrAdd" type="button">+ Tambah user</button></div></div>
+      <div class="urole"><div><b>Administrator</b>Melihat data, upload/ubah data, dan mengelola user (termasuk menambah Administrator baru).</div><div><b>Editor</b>Melihat data dan upload/ubah data.</div><div><b>Viewer</b>Hanya melihat data.</div></div>
+      <div id="usrList"></div>
+    </div>
+  </div>
 </div>
 <div class="tip" id="tip"></div>
-<div class="pinov" id="pinOv" hidden role="dialog" aria-modal="true" aria-labelledby="pinH"><div class="pindlg">
-  <h2 id="pinH" style="margin:0 0 4px">Masukkan PIN edit</h2>
-  <div class="hint" id="pinNote" style="margin:0 0 10px">PIN diperlukan untuk menyimpan data ke database online.</div>
-  <input id="pinIn" type="password" placeholder="PIN" autocomplete="off" aria-label="PIN edit">
-  <label style="display:flex;gap:6px;align-items:center;font-size:12px;color:var(--fg2);margin:8px 0"><input type="checkbox" id="pinRem" checked> Ingat PIN di komputer ini</label>
-  <div id="pinErr" style="font-size:12px;color:var(--crit);min-height:16px"></div>
-  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:6px"><button class="btn" id="pinCancel" type="button">Batal</button><button class="btn on" id="pinOk" type="button">Masuk</button></div>
-</div></div>
+
 
 
 <script id="seed" type="application/json"></script>
@@ -648,9 +705,10 @@ var tip=$("tip");
 function showTip(e,txt){tip.textContent=txt;tip.style.display="block";var x=e.clientX+12,y=e.clientY+12,w=tip.offsetWidth,h=tip.offsetHeight;if(x+w>innerWidth-8)x=e.clientX-w-12;if(y+h>innerHeight-8)y=e.clientY-h-12;tip.style.left=x+"px";tip.style.top=y+"px"}
 function hideTip(){tip.style.display="none"}
 function goDetail(f){F={grp:f.grp||"",sub:f.sub||"",rc:f.rc||"",mon:f.mon||"",age:f.age||"",src:f.src||"",ven:f.ven||"",ji:"",jiM:[],monM:f.mon?[String(f.mon)]:[]};F.mon="";PAGE=0;OPEN={};setView("det")}
-function setView(v){VIEW=v;$("viewMain").hidden=v!=="main";$("viewDet").hidden=v!=="det";$("viewFU").hidden=v!=="fu";$("tabMain").classList.toggle("on",v==="main");$("tabDet").classList.toggle("on",v==="det");$("tabFU").classList.toggle("on",v==="fu");$("tabCap").style.visibility=v==="det"?"":"hidden";render();if(v==="det")window.scrollTo(0,$("viewDet").offsetTop-10)}
+function setView(v){VIEW=v;document.body.classList.toggle("v-usr",v==="usr");$("viewUsr").hidden=v!=="usr";$("tabUsr").classList.toggle("on",v==="usr");$("viewMain").hidden=v!=="main";$("viewDet").hidden=v!=="det";$("viewFU").hidden=v!=="fu";$("tabMain").classList.toggle("on",v==="main");$("tabDet").classList.toggle("on",v==="det");$("tabFU").classList.toggle("on",v==="fu");$("tabCap").style.visibility=v==="det"?"":"hidden";render();if(v==="det")window.scrollTo(0,$("viewDet").offsetTop-10)}
 
 function render(){
+  if(VIEW==="usr"){if(typeof renderUsr==="function")renderUsr();return}
   if(!D)return;
   var B=base();
   $("tabDetS").textContent=fn(B.length)+" NP";
@@ -658,6 +716,7 @@ function render(){
   var FL=fuLines(B);$("tabFUS").textContent="H-1 sampai H-7 · "+fn(FL.length)+" item";
   if(VIEW==="main"){renderMatrix(B);renderGroup("gG","G",B);renderGroup("gS","S",B);renderGroup("gA","A",B);renderType("gT",B);renderVendor("gV",B)}
   else if(VIEW==="fu")renderFU(FL);
+  else if(VIEW==="usr")renderUsr();
   else renderDetail(B);
 }
 function renderSum(B){
@@ -1432,7 +1491,7 @@ function saveShared(kind,snap,name){
       if(i<n){db.doc("snap/"+p+"c"+i).set({ver:ver,rows:JSON.stringify(snap.rows.slice(i*CH,(i+1)*CH))}).then(function(){i++;next()},fail);return}
       db.doc("snap/"+p+"meta").set({ver:ver,chunks:n,info:snap.info,name:name,at:new Date().toISOString()}).then(function(){msg("Tersimpan ✓ Semua yang membuka dashboard ini melihat data terbaru.");done(true)},fail);
     })();
-    function fail(e){msg(e&&e.code==="cancel"?"Belum disimpan ke database (PIN dibatalkan). Data hanya tampil di layar ini; upload ulang dan masukkan PIN untuk menyimpan.":e&&e.code==="pin"?"PIN salah. Data belum tersimpan ke database; upload ulang dan masukkan PIN yang benar.":"Gagal menyimpan ke database ("+((e&&e.message)||"error")+"). Data tetap tampil di layar ini.");done(false)}
+    function fail(e){msg(e&&e.code==="denied"?"Akun Anda tidak punya akses menyimpan data (hanya Editor/Administrator).":e&&e.code==="session"?"Sesi login berakhir, data belum tersimpan. Masuk lagi lalu upload ulang.":"Gagal menyimpan ke database ("+((e&&e.message)||"error")+"). Data tetap tampil di layar ini.");done(false)}
   });
 }
 function loadKind(kind){
@@ -1462,28 +1521,82 @@ try{SNAPS.nav=JSON.parse($("seedNAV").textContent);SRCS.nav="data bawaan"}catch(
 try{SNAPS.wms=JSON.parse($("seedWMS").textContent);SRCS.wms="data bawaan"}catch(e){}
 try{SNAPS.pic=JSON.parse($("seedPIC").textContent);SRCS.pic="data bawaan"}catch(e){}
 if(SNAPS.ots)applyAll();else cards();
-/* ===== Database online (Supabase): semua komputer melihat data yang sama; simpan wajib PIN (dicek di server) ===== */
-var SB_URL="https://uiqnjikekmgkqgjclipp.supabase.co",SB_KEY="sb_publishable_dyyzeW2ur58cFNNXZdV93g_fNm8aBBU",REST=SB_URL+"/rest/v1/",PIN="",pinWait=null;
-try{PIN=sessionStorage.getItem("kos_pin")||localStorage.getItem("kos_pin")||""}catch(e){}
+/* ===== Database online (Supabase): data hanya bisa dibaca/diubah setelah login; hak akses dicek di server ===== */
+var SB_URL="https://uiqnjikekmgkqgjclipp.supabase.co",SB_KEY="sb_publishable_dyyzeW2ur58cFNNXZdV93g_fNm8aBBU",REST=SB_URL+"/rest/v1/";
 function sbH(){return {apikey:SB_KEY,"Content-Type":"application/json"}}
-function sbErr(r){return r.text().then(function(t){var m="";try{var j=JSON.parse(t);m=j.message||j.hint||""}catch(x){}var e=new Error(/PIN salah/i.test(m)?"PIN salah":/does not exist|schema cache|PGRST20|osp_snap_put/i.test(m)?"database belum di-update (jalankan update_supabase_kontrol_outstanding.sql di Supabase)":m||("HTTP "+r.status));e.code=/PIN salah/i.test(m)?"pin":"http";throw e})}
+function sbErr(r){return r.text().then(function(t){var m="";try{var j=JSON.parse(t);m=j.message||j.hint||""}catch(x){}var e=new Error(/kos_login|kos_get|kos_me|does not exist|schema cache|PGRST20/i.test(m)&&!/SESI_HABIS|AKSES_DITOLAK|LOGIN_GAGAL/.test(m)?"database belum disiapkan (jalankan setup_login_kontrol_outstanding.sql di Supabase)":m||("HTTP "+r.status));e.code="http";throw e})}
 function rpc(fn,args){return fetch(REST+"rpc/"+fn,{method:"POST",headers:sbH(),body:JSON.stringify(args)}).then(function(r){return r.ok?r.text().then(function(t){try{return JSON.parse(t)}catch(x){return t}}):sbErr(r)},function(){var e=new Error("tidak terhubung ke internet");e.code="net";throw e})}
-function pinUI(){var b=$("btnPin");b.textContent=PIN?"🔓 Mode edit · Kunci":"🔒 PIN edit"}
-function setPin(p,rem){PIN=p||"";try{if(PIN){sessionStorage.setItem("kos_pin",PIN);if(rem)localStorage.setItem("kos_pin",PIN);else localStorage.removeItem("kos_pin")}else{sessionStorage.removeItem("kos_pin");localStorage.removeItem("kos_pin")}}catch(e){}pinUI()}
-function askPin(note){return new Promise(function(res,rej){pinWait={res:res,rej:rej};$("pinNote").textContent=note||"PIN diperlukan untuk menyimpan data ke database online.";$("pinErr").textContent="";$("pinIn").value="";$("pinOv").hidden=false;$("pinIn").focus()})}
-function pinClose(ok){$("pinOv").hidden=true;var w=pinWait;pinWait=null;if(w){if(ok)w.res(PIN);else{var e=new Error("PIN dibatalkan");e.code="cancel";w.rej(e)}}}
-function pinGo(){var p=$("pinIn").value.trim();if(!p){$("pinErr").textContent="Isi PIN terlebih dahulu.";return}$("pinOk").disabled=true;$("pinErr").textContent="Memeriksa…";
-  rpc("check_pin",{p_pin:p}).then(function(ok){$("pinOk").disabled=false;if(ok!==true){$("pinErr").textContent="PIN salah.";$("pinIn").select();return}setPin(p,$("pinRem").checked);pinClose(true)},function(e){$("pinOk").disabled=false;$("pinErr").textContent="Tidak bisa memeriksa PIN ("+e.message+")."})}
-$("pinOk").onclick=pinGo;$("pinCancel").onclick=function(){pinClose(false)};
-$("pinIn").onkeydown=function(e){if(e.key==="Enter")pinGo();if(e.key==="Escape")pinClose(false)};
-$("pinOv").onclick=function(e){if(e.target===$("pinOv"))pinClose(false)};
-$("btnPin").onclick=function(){if(PIN){setPin("");toast("Mode edit dikunci.")}else askPin("Masukkan PIN untuk mengaktifkan mode edit (upload data).").then(function(){toast("Mode edit aktif.")},function(){})};
-function needPin(){return PIN?Promise.resolve(PIN):askPin("PIN diperlukan untuk menyimpan data ke database online supaya semua orang melihat data terbaru.")}
+var AUTHB=rpc;
+/* ===== Login: Administrator / Editor / Viewer (akun & sesi dicek di server) ===== */
+var AUTH={token:"",user:null};
+var ROLE_L={admin:"Administrator",editor:"Editor",viewer:"Viewer"};
+(function(){try{AUTH.token=sessionStorage.getItem("kos_tok")||localStorage.getItem("kos_tok")||""}catch(e){}})();
+function authSave(t,rem){AUTH.token=t||"";try{sessionStorage.removeItem("kos_tok");localStorage.removeItem("kos_tok");if(t){(rem?localStorage:sessionStorage).setItem("kos_tok",t)}}catch(e){}}
+function authErr(e){var m=String(e&&e.message||e||"");var c=/SESI_HABIS/.test(m)?"session":/AKSES_DITOLAK/.test(m)?"denied":/LOGIN_GAGAL/.test(m)?"login":/PASSWORD_SALAH/.test(m)?"oldpass":e&&e.code||"err";
+  var x=new Error(m.replace(/^[A-Z_]+:\s*/,""));x.code=c;if(c==="session")authKick("Sesi login berakhir. Silakan masuk lagi.");return x}
+function authCall(fn,args){return AUTHB(fn,args).then(function(r){return r},function(e){throw authErr(e)})}
+function authKick(msg){authSave("");AUTH.user=null;showLogin(msg)}
+function showLogin(msg){document.body.classList.add("locked");$("loginOv").hidden=false;$("lgErr").textContent=msg||"";$("lgPass").value="";setTimeout(function(){try{($("lgUser").value?$("lgPass"):$("lgUser")).focus()}catch(_){}},30)}
+var authStarted=false;
+function onLogin(u){AUTH.user=u;document.body.classList.remove("locked");$("loginOv").hidden=true;
+  document.body.classList.toggle("role-viewer",u.role==="viewer");document.body.classList.toggle("role-admin",u.role==="admin");
+  $("tabUsr").hidden=u.role!=="admin";if(u.role!=="admin"&&VIEW==="usr")setView("main");
+  var b=$("uBar");b.innerHTML="";var w=el("span",{cls:"who"},"👤 "+u.nama);w.appendChild(el("span",{cls:"rl"},ROLE_L[u.role]||u.role));b.appendChild(w);
+  var cp=el("button",{type:"button"},"Ganti password");cp.onclick=dlgPass;b.appendChild(cp);
+  var lo=el("button",{type:"button"},"Keluar");lo.onclick=function(){var t=AUTH.token;authCall("kos_logout",{p_token:t}).catch(function(){});authSave("");AUTH.user=null;location.reload()};b.appendChild(lo);
+  if(!authStarted){authStarted=true;if(typeof authReady==="function")authReady()}}
+$("lgForm").onsubmit=function(e){e.preventDefault();var u=$("lgUser").value.trim(),p=$("lgPass").value;if(!u||!p){$("lgErr").textContent="Isi username dan password.";return}
+  $("lgBtn").disabled=true;$("lgErr").textContent="Memeriksa…";
+  authCall("kos_login",{p_user:u,p_pass:p,p_remember:$("lgRem").checked}).then(function(r){$("lgBtn").disabled=false;$("lgErr").textContent="";authSave(r.token,$("lgRem").checked);onLogin({username:r.username,nama:r.nama,role:r.role})},
+    function(e){$("lgBtn").disabled=false;$("lgErr").textContent=e.code==="login"?"Username atau password salah.":e.code==="net"?"Tidak terhubung ke internet.":"Gagal masuk: "+e.message})};
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".eye");if(!b)return;var i=$(b.getAttribute("data-for"));if(i)i.type=i.type==="password"?"text":"password"});
+/* dialog umum */
+function dlgOpen(title,build,onOk,okLbl){var bx=$("uDlgBox");bx.innerHTML="";bx.appendChild(el("h2",null,title));var body=el("div",{style:"display:flex;flex-direction:column;gap:12px"});bx.appendChild(body);build(body);
+  var er=el("div",{cls:"lgerr"});bx.appendChild(er);var bt=el("div",{cls:"udbtns"}),c=el("button",{cls:"btn",type:"button"},"Batal"),o=el("button",{cls:"btn on",type:"button"},okLbl||"Simpan");bt.appendChild(c);bt.appendChild(o);bx.appendChild(bt);
+  c.onclick=dlgClose;o.onclick=function(){er.textContent="";o.disabled=true;Promise.resolve().then(onOk).then(function(){o.disabled=false;dlgClose()},function(e){o.disabled=false;er.textContent=e&&e.message||String(e)})};
+  $("uDlg").hidden=false;var f=bx.querySelector("input:not([readonly]),select");if(f)setTimeout(function(){f.focus()},30)}
+function dlgClose(){$("uDlg").hidden=true;$("uDlgBox").innerHTML=""}
+$("uDlg").onclick=function(e){if(e.target===$("uDlg"))dlgClose()};
+function fld(body,lbl,attrs,val){var l=el("label",null,lbl),i;if(attrs.type==="password"){var w=el("span",{cls:"pwr"});i=el("input",attrs);w.appendChild(i);var ey=el("button",{type:"button",cls:"eye"},"👁");ey.onclick=function(){i.type=i.type==="password"?"text":"password"};w.appendChild(ey);l.appendChild(w)}else{i=el(attrs.tag||"input",attrs);l.appendChild(i)}if(val!=null)i.value=val;body.appendChild(l);return i}
+function dlgPass(){var o,n,n2;dlgOpen("Ganti password",function(b){o=fld(b,"Password lama",{type:"password",autocomplete:"current-password"});n=fld(b,"Password baru (min. 6 karakter)",{type:"password",autocomplete:"new-password"});n2=fld(b,"Ulangi password baru",{type:"password",autocomplete:"new-password"})},
+  function(){if(n.value.length<6)throw new Error("Password baru minimal 6 karakter.");if(n.value!==n2.value)throw new Error("Ulangan password baru tidak sama.");
+    return authCall("kos_change_password",{p_token:AUTH.token,p_old:o.value,p_new:n.value}).then(function(){toast("Password berhasil diganti.")},function(e){throw new Error(e.code==="oldpass"?"Password lama salah.":e.message)})})}
+/* ===== Maintenance User (Administrator) ===== */
+var USERS=[];
+function renderUsr(){var box=$("usrList");if(!box||!AUTH.user||AUTH.user.role!=="admin")return;box.innerHTML='<div class="hint">Memuat daftar user…</div>';
+  authCall("kos_users_list",{p_token:AUTH.token}).then(function(L){USERS=L||[];drawUsr()},function(e){box.innerHTML="";box.appendChild(el("div",{cls:"hint",style:"color:var(--crit)"},"Gagal memuat user: "+e.message))})}
+function fdt(s){if(!s)return "–";var d=new Date(s);return fd(d)+" "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2)}
+function drawUsr(){var box=$("usrList");box.innerHTML="";var q=($("usrQ").value||"").toLowerCase();
+  var cnt={admin:0,editor:0,viewer:0};USERS.forEach(function(u){cnt[u.role]++});$("usrInfo").textContent=fn(USERS.length)+" user · "+cnt.admin+" Administrator · "+cnt.editor+" Editor · "+cnt.viewer+" Viewer";
+  var t=el("table",{cls:"utbl"}),h=el("tr");["Username","Nama","Role","Status","Login terakhir","Dibuat","Aksi"].forEach(function(x){h.appendChild(el("th",null,x))});var th=el("thead");th.appendChild(h);t.appendChild(th);var tb=el("tbody");
+  USERS.filter(function(u){return !q||(u.username+" "+u.nama+" "+(ROLE_L[u.role]||"")).toLowerCase().indexOf(q)>=0}).forEach(function(u){var tr=el("tr",{cls:u.active?"":"off"});
+    function td(l,v){var d=el("td",{"data-l":l});if(v&&v.nodeType)d.appendChild(v);else d.textContent=v;tr.appendChild(d);return d}
+    td("Username",u.username+(u.username===AUTH.user.username?" (Anda)":""));td("Nama",u.nama);td("Role",el("span",{cls:"rb "+u.role},ROLE_L[u.role]));td("Status",el("span",{cls:"ust "+(u.active?"on":"off")},u.active?"Aktif":"Nonaktif"));
+    td("Login terakhir",fdt(u.last_login));td("Dibuat",fdt(u.created_at)+(u.created_by?" · "+u.created_by:""));
+    var a=el("div",{cls:"uact"}),ed=el("button",{cls:"btn",type:"button"},"Edit");ed.onclick=function(){dlgUser(u)};a.appendChild(ed);
+    if(u.username!==AUTH.user.username){var dl=el("button",{cls:"btn",type:"button"},"Hapus");dl.onclick=function(){dlgOpen("Hapus user?",function(b){b.appendChild(el("div",{style:"font-size:14px"},"User "+u.username+" ("+u.nama+") akan dihapus dan tidak bisa login lagi."))},function(){return authCall("kos_user_delete",{p_token:AUTH.token,p_username:u.username}).then(function(){toast("User dihapus.");renderUsr()})},"Hapus")};a.appendChild(dl)}
+    td("Aksi",a);tb.appendChild(tr)});
+  t.appendChild(tb);box.appendChild(t)}
+function dlgUser(u){var isNew=!u,un,nm,rl,pw,ac;dlgOpen(isNew?"Tambah user":"Edit user "+u.username,function(b){
+    un=fld(b,"Username (huruf kecil, angka, titik, minus; 3-40 karakter)",{autocomplete:"off",autocapitalize:"none",spellcheck:"false"},isNew?"":u.username);if(!isNew)un.readOnly=true;
+    nm=fld(b,"Nama",{autocomplete:"off"},isNew?"":u.nama);
+    rl=fld(b,"Role",{tag:"select"});[["viewer","Viewer: hanya melihat data"],["editor","Editor: melihat + upload/ubah data"],["admin","Administrator: semua + kelola user"]].forEach(function(o){rl.appendChild(el("option",{value:o[0]},o[1]))});rl.value=isNew?"viewer":u.role;
+    pw=fld(b,isNew?"Password (min. 6 karakter)":"Password baru (kosongkan bila tidak diganti)",{type:"password",autocomplete:"new-password"});
+    var l=el("label",{cls:"chk"});ac=el("input",{type:"checkbox"});ac.checked=isNew?true:!!u.active;l.appendChild(ac);l.appendChild(document.createTextNode(" Akun aktif (bisa login)"));b.appendChild(l);
+    if(!isNew&&u.username===AUTH.user.username){rl.disabled=true;ac.disabled=true}},
+  function(){var name=un.value.trim().toLowerCase();if(!/^[a-z0-9._-]{3,40}$/.test(name))throw new Error("Username hanya huruf kecil, angka, titik, minus, garis bawah (3-40 karakter).");if(!nm.value.trim())throw new Error("Nama wajib diisi.");
+    if(isNew&&pw.value.length<6)throw new Error("Password minimal 6 karakter.");if(!isNew&&pw.value&&pw.value.length<6)throw new Error("Password minimal 6 karakter.");
+    return authCall("kos_user_save",{p_token:AUTH.token,p_username:name,p_nama:nm.value.trim(),p_role:rl.value,p_pass:pw.value,p_active:ac.checked,p_new:isNew}).then(function(){toast(isNew?"User "+name+" ditambahkan.":"User "+name+" diperbarui.");renderUsr()})})}
+$("usrAdd").onclick=function(){dlgUser(null)};$("usrQ").oninput=drawUsr;
+$("tabUsr").onclick=function(){setView("usr")};
+/* mulai */
+if(AUTH.token){authCall("kos_me",{p_token:AUTH.token}).then(onLogin,function(e){if(e.code!=="session")showLogin(e.code==="net"?"Tidak terhubung ke internet. Coba lagi.":"")})}else showLogin("");
+
 db={doc:function(path){var id=String(path).replace(/^snap\//,"");return {
-  set:function(obj){return needPin().then(function(pin){return rpc("osp_snap_put",{p_pin:pin,p_id:id,p_data:obj})}).catch(function(e){if(e.code==="pin"){setPin("")}throw e})},
-  get:function(){return fetch(REST+"osp_docs?select=data,updated_at&coll=eq.snap&id=eq."+encodeURIComponent(id),{headers:sbH(),cache:"no-store"}).then(function(r){return r.ok?r.json():sbErr(r)}).then(function(a){var d=a&&a[0];return {exists:!!d,data:function(){return d?d.data:null}}})}}}};
-pinUI();loadShared();
-var lastLoad=Date.now();document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&Date.now()-lastLoad>60000){lastLoad=Date.now();loadShared()}});
+  set:function(obj){if(!AUTH.user||AUTH.user.role==="viewer"){var e=new Error("Akun Viewer tidak bisa menyimpan data");e.code="denied";return Promise.reject(e)}return authCall("kos_put",{p_token:AUTH.token,p_id:id,p_data:obj})},
+  get:function(){return authCall("kos_get",{p_token:AUTH.token,p_ids:[id]}).then(function(a){var d=a&&a[0];return {exists:!!d,data:function(){return d?d.data:null}}})}}}};
+function authReady(){loadShared()}
+var lastLoad=Date.now();document.addEventListener("visibilitychange",function(){if(AUTH.user&&document.visibilityState==="visible"&&Date.now()-lastLoad>60000){lastLoad=Date.now();loadShared()}});
 })();
 </script>
 <style>.wamode{font:inherit;font-size:12.5px;font-weight:600;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--fg);min-width:0;width:auto;max-width:none;cursor:pointer}.nowa .wamode{display:none}</style><script>
