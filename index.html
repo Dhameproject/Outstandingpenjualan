@@ -1217,19 +1217,19 @@ function capLabel(h){var t=h.querySelector("h2");if(t)return t.textContent;if(h.
 function capCard(host,btn){
   if(typeof html2canvas==="undefined"){toast("Fitur capture belum termuat. Coba muat ulang halaman.");return}
   try{mfClose()}catch(_){}
-  btn.disabled=true;btn.textContent="⏳";CAPLBL=capLabel(host);
+  btn.disabled=true;btn.textContent="⏳";CAPLBL=capLabel(host);document.documentElement.classList.add("capnz");
   var need=host.offsetWidth;
   host.querySelectorAll(".tblwrap,.mxw").forEach(function(w){var t=w.firstElementChild;if(t&&t.scrollWidth>w.clientWidth)need=Math.max(need,host.offsetWidth+(t.scrollWidth-w.clientWidth)+20)});
   host.setAttribute("data-capt","1");
   var opts={backgroundColor:"#ffffff",scale:Math.max(1,Math.min(3,Math.sqrt(1.2e8/Math.max(1,need*Math.max(host.scrollHeight,200))))),useCORS:true,logging:false,scrollX:0,scrollY:0,windowWidth:need+200,
-    onclone:function(doc){var h=doc.querySelector("[data-capt]");if(!h)return;doc.body.style.width=(need+200)+"px";h.style.width=need+"px";h.style.maxWidth="none";h.style.margin="0";h.style.boxShadow="none";
+    onclone:function(doc){doc.documentElement.classList.add("capnz");var h=doc.querySelector("[data-capt]");if(!h)return;doc.body.style.width=(need+200)+"px";h.style.width=need+"px";h.style.maxWidth="none";h.style.margin="0";h.style.boxShadow="none";
       h.querySelectorAll(".tblwrap,.mxw").forEach(function(w){w.style.maxHeight="none";w.style.overflow="visible"});
       doc.querySelectorAll(".vov,.mfp,.tip").forEach(function(n){n.remove()});
       var top=doc.createElement("div");top.style.cssText="margin:0 0 14px;padding-right:0";
       var stn=doc.createElement("div");stn.textContent=(D&&D.store?D.store:"").toUpperCase();stn.style.cssText="font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--navy);padding-bottom:8px;border-bottom:1.5px solid var(--line)";top.appendChild(stn);
       if(h.querySelector("#mx")){var sm=doc.getElementById("sum");if(sm){var sc=sm.cloneNode(true);sc.removeAttribute("id");sc.style.margin="12px 0 0";sc.style.boxShadow="none";sc.style.background="#fff";top.appendChild(sc)}}
       h.insertBefore(top,h.firstChild)}};
-  function done(){host.removeAttribute("data-capt");btn.disabled=false;btn.textContent="📷"}
+  function done(){host.removeAttribute("data-capt");document.documentElement.classList.remove("capnz");btn.disabled=false;btn.textContent="📷"}
   setTimeout(function(){html2canvas(host,opts).then(function(cv){done();showCap(cv,CAPLBL)},function(err){done();toast("Gagal membuat gambar: "+(err&&err.message||err))})},30);
 }
 function ensureCap(){document.querySelectorAll("#viewMain .card").forEach(function(h){
@@ -1276,11 +1276,11 @@ function capFU(btn,keys){var lbl0=btn.textContent;
   t.appendChild(tb);R.appendChild(t);
   if(L.length>MAX)R.appendChild(el("div",{cls:"more"},"Menampilkan "+fn(MAX)+" dari "+fn(L.length)+" item. Pakai filter agar gambar memuat semua item, atau Unduh Excel."));
   if(!L.length)R.appendChild(el("div",{cls:"more"},"Tidak ada item untuk filter ini."));
-  document.body.appendChild(R);
+  document.documentElement.classList.add("capnz");document.body.appendChild(R);
   btn.disabled=true;btn.textContent="⏳ Membuat gambar…";CAPLBL=keys?"Follow Up Terjual Ringkas":"Follow Up Terjual";
-  function done(){R.remove();btn.disabled=false;btn.textContent=lbl0}
+  function done(){R.remove();document.documentElement.classList.remove("capnz");btn.disabled=false;btn.textContent=lbl0}
   setTimeout(function(){var w0=R.scrollWidth,h0=R.scrollHeight,scl=Math.max(1,Math.min(3,30000/h0,Math.sqrt(1.4e8/(w0*h0))));html2canvas(R,{backgroundColor:"#ffffff",scale:scl,useCORS:true,logging:false,scrollX:0,scrollY:0,windowWidth:R.scrollWidth+100,x:0,y:0,
-      onclone:function(doc){var r=doc.getElementById("capRep");r.style.left="0";r.style.position="absolute"}}).then(function(cv){done();showCap(cv,keys?"Follow Up Terjual (Ringkas)":"Follow Up Terjual",Math.round(cv.width/scl))},function(err){done();toast("Gagal membuat gambar: "+(err&&err.message||err))})},40);
+      onclone:function(doc){doc.documentElement.classList.add("capnz");var r=doc.getElementById("capRep");r.style.left="0";r.style.position="absolute"}}).then(function(cv){done();showCap(cv,keys?"Follow Up Terjual (Ringkas)":"Follow Up Terjual",Math.round(cv.width/scl))},function(err){done();toast("Gagal membuat gambar: "+(err&&err.message||err))})},40);
 }
 function capPage(){var b=$("tabCap");if(VIEW==="fu"){capFU(b);return}
   var host=VIEW==="det"?$("viewDet"):$("viewMain");var fake={};capCard(host,fake);CAPLBL=VIEW==="det"?"Detail NP":"Dashboard Utama";
@@ -1583,5 +1583,6 @@ var lastLoad=Date.now();document.addEventListener("visibilitychange",function(){
 @media(min-width:1100px){.srcrow{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media(min-width:1400px){body{zoom:1.1}.wrap{max-width:1440px!important}}
 @media(min-width:1800px){body{zoom:1.22}.wrap{max-width:1500px!important}}
+html.capnz body{zoom:1!important}
 </style></body>
 </html>
