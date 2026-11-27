@@ -1602,14 +1602,14 @@ function xlsxStyled(XL,u8,o){
   var sh=str(f("xl/worksheets/sheet1.xml").content);
   function ci(L){var n=0;for(var i=0;i<L.length;i++)n=n*26+L.charCodeAt(i)-64;return n-1}
   sh=sh.replace(/<c r="([A-Z]+)(\d+)"/g,function(m,L,R){var r=+R-1,c=ci(L),b=o.style(r,c);return m+' s="'+(1+b+(r>0&&r%2===0?N:0))+'"'});
+  if(o.ncol){var CL=[];for(var k=0;k<o.ncol;k++){var t="",n=k+1;while(n>0){var md=(n-1)%26;t=String.fromCharCode(65+md)+t;n=Math.floor((n-1)/26)}CL.push(t)}
+    sh=sh.replace(/<row r="(\d+)"([^>]*)>([\s\S]*?)<\/row>/g,function(m,R,at,inner){var r=+R-1,cells={};inner.replace(/<c r="([A-Z]+)\d+"[\s\S]*?(?:<\/c>|\/>)/g,function(cm,L){cells[L]=cm;return cm});
+      var o2="";for(var c=0;c<CL.length;c++)o2+=cells[CL[c]]||('<c r="'+CL[c]+R+'" s="'+(1+o.style(r,c)+(r>0&&r%2===0?N:0))+'"/>');return '<row r="'+R+'"'+at+'>'+o2+'</row>'})}
   sh=sh.replace('<row r="1">','<row r="1" ht="'+(o.headH||32)+'" customHeight="1">');
-  sh=sh.replace('<sheetView workbookViewId="0"/>','<sheetView workbookViewId="0" zoomScale="'+(o.zoom||100)+'"><pane ySplit="1" xSplit="'+(o.xSplit||0)+'" topLeftCell="'+(o.xSplit?String.fromCharCode(65+o.xSplit):"A")+'2" activePane="bottomRight" state="frozen"/><selection pane="bottomRight"/></sheetView>');
-  if(!o.xSplit)sh=sh.replace('activePane="bottomRight"','activePane="bottomLeft"').replace('<selection pane="bottomRight"/>','<selection pane="bottomLeft"/>');
-  var pg='<pageMargins left="0.3" right="0.3" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape"/>';
-  sh=sh.indexOf("<ignoredErrors")>=0?sh.replace("<ignoredErrors",pg+"<ignoredErrors"):sh.replace("</worksheet>",pg+"</worksheet>");
+  sh=sh.replace('<sheetView workbookViewId="0"/>','<sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView>');
   put("xl/worksheets/sheet1.xml",sh);
   var wbx=str(f("xl/workbook.xml").content);
-  return XL.CFB.write(z,{fileType:"zip",type:"array",compression:true});
+  return XL.CFB.write(z,{fileType:"zip",type:"array"});
 }
 
 $("monCap").onclick=function(e){e.stopPropagation();var h=this.closest(".card");capCard(h,this)};
@@ -1629,16 +1629,16 @@ $("monXls").onclick=function(){if(!MONCUR.length){toast("Tidak ada baris untuk d
    ["Status kedatangan",16,"st",function(x){return x.stat}],["Status dokumen",14,"w",function(x){return x.ds||""}],
    ["Terakhir diterima",13,"d",function(x){return xSer(x.last)}],["Expired",12,"d",function(x){return xSer(x.exp)}],
    ["Comment PO / TR",48,"w",function(x){return x.cm||""}]];
-  var aoa=[MX.map(function(c){return c[0]})].concat(MONCUR.map(function(x){return MX.map(function(c){var v=c[3](x);return v==null?"":v})}));
-  var ws=XLSX.utils.aoa_to_sheet(aoa);ws["!cols"]=MX.map(function(c){return {wch:c[1]}});
+  var aoa=[MX.map(function(c){return c[0]})].concat(MONCUR.map(function(x){return MX.map(function(c){var v=c[3](x);return v==null||v===""?null:v})}));
+  var ws=XLSX.utils.aoa_to_sheet(aoa,{sheetStubs:false});ws["!cols"]=MX.map(function(c){return {wch:c[1]}});
   ws["!autofilter"]={ref:XLSX.utils.encode_range({s:{r:0,c:0},e:{r:aoa.length-1,c:MX.length-1}})};
   var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Monitoring PO TR");
   var u8=new Uint8Array(XLSX.write(wb,{bookType:"xlsx",type:"array"}));
   var BS=[[1,2,0,"center",1,"center"],[0,0,0,"",0],[0,0,0,"",1],[0,0,3,"right"],[2,0,3,"right"],[0,0,164,"center"],[3,0,0,"",1],[4,0,0,"",1],[5,0,0,"",1],[6,0,0,"",1],[2,0,0,"",0],[0,0,0,"center",0]];
-  var out;try{out=xlsxStyled(XLSX,u8,{bases:BS,xSplit:0,style:function(r,c){if(r===0)return 0;var t=MX[c][2],v=aoa[r][c];
+  var out;try{out=xlsxStyled(XLSX,u8,{bases:BS,ncol:MX.length,style:function(r,c){if(r===0)return 0;var t=MX[c][2],v=aoa[r][c];
     if(t==="d")return 5;if(t==="n")return 3;if(t==="nb")return 4;if(t==="w")return 2;if(t==="b")return 10;if(t==="c")return 11;
     if(t==="st")return v==="Sudah datang"?7:v==="Belum datang"?6:v==="Partial"?8:9;
-    if(t==="pdk")return /selesai/.test(v)?9:/^Lewat/.test(v)?6:/^Hari ini/.test(v)?8:/hari lagi/.test(v)?7:1;return 1}})}catch(e){out=u8}
+    if(t==="pdk")return /selesai/.test(v)?9:/^Lewat/.test(v)?6:/^Hari ini/.test(v)?8:/hari lagi/.test(v)?7:1;return 1}});var chk=XLSX.read(out,{type:"array",sheetRows:3}),cs=chk.Sheets[chk.SheetNames[0]];if(!cs||!cs.A1||cs.A1.v!=="PDD"||!cs.A2)throw new Error("cek gagal")}catch(e){console.warn("xlsx style",e);out=u8}
   var d=new Date(),fnm="Monitoring-PO-TR-"+d.getFullYear()+("0"+(d.getMonth()+1)).slice(-2)+("0"+d.getDate()).slice(-2)+"-"+("0"+d.getHours()).slice(-2)+("0"+d.getMinutes()).slice(-2)+".xlsx";
   var blob=new Blob([out],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),n=MONCUR.length;
   function ok(){btn.textContent="Terunduh ✓ ("+fn(n)+" baris)";setTimeout(function(){btn.textContent="⬇ Unduh Excel"},2500)}
