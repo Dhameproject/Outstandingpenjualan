@@ -373,7 +373,10 @@ body.locked .wrap,body.locked .tip{display:none!important}
 .ubar button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
 .ubar button:hover{background:rgba(255,255,255,.25)}
 #tabUsr[hidden],.tab[hidden]{display:none!important}
-body.v-usr #sum,body.v-usr .bar{display:none!important}
+body.v-usr #sum,body.v-usr .bar{display:none!important}body.v-mon #sum,body.v-mon .bar{display:none!important}
+.mgbar{display:flex!important;flex-direction:column;align-items:stretch!important;justify-content:flex-start!important;gap:8px}.mgbar>*{width:100%;box-sizing:border-box}.mgrow{justify-items:start}.mgtop{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:6px;border-bottom:1px solid var(--line)}.mgrow{display:grid;grid-template-columns:140px minmax(0,1fr);gap:10px;align-items:center}.mgl{font-size:11.5px;font-weight:800;color:var(--fg3);text-transform:uppercase;letter-spacing:.03em}.mgo{display:flex;flex-wrap:wrap;gap:6px}.mgo .fc{margin:0}@media(max-width:700px){.mgrow{grid-template-columns:1fr;gap:4px}}
+#monBar{border-radius:14px 14px 0 0!important;margin-bottom:0!important;border-bottom:0!important}.mgextra{display:block;gap:10px;align-items:end;background:#f3f8f8;border:1px solid var(--line);border-top:1px dashed var(--line);border-radius:0 0 14px 14px;margin:0 0 12px;padding:10px}.mgxo{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}.mgxo label{display:flex;flex-direction:column;gap:4px;font-size:11.5px;font-weight:700;color:var(--fg3)}.mgxo input[type=search]{font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;min-width:260px;background:#fff}.mgxo .mfb{min-width:150px;background:#fff!important;border:1px solid var(--line)!important;border-radius:10px!important;padding:8px 10px!important;color:var(--fg)!important;text-align:left}.mgxo .mfb.on{background:#fff6d6!important;border-color:#e8c65a!important}.mgextra .mgl{padding-bottom:10px;padding-left:0}@media(max-width:700px){.mgextra{grid-template-columns:1fr}.mgxo input[type=search]{min-width:0;width:100%}.mgxo label{width:100%}}
+.monpop{position:absolute;right:20px;z-index:60;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 36px rgba(15,35,60,.2);padding:14px;width:min(420px,calc(100% - 40px));display:flex;flex-direction:column;gap:10px}.monpop[hidden]{display:none!important}.monpop label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:var(--fg2)}.monpop input[type=search]{width:100%;box-sizing:border-box}.monpop .mfb{width:100%}
 body.role-viewer .uplbox{display:none!important}
 .utbl{width:100%;border-collapse:collapse;font-size:13px}
 .utbl th{background:var(--navy,#0f4c5c);color:#fff;text-align:left;padding:9px 10px;font-size:11.5px;letter-spacing:.03em;text-transform:uppercase}
@@ -388,6 +391,7 @@ body.role-viewer .uplbox{display:none!important}
 .urole div{border:1px solid var(--line,#e3e8ec);border-radius:10px;padding:8px 10px;font-size:12px;color:var(--fg2,#44525e)}
 .urole b{display:block;margin-bottom:2px}
 @media(max-width:700px){.urole{grid-template-columns:1fr}.utbl thead{display:none}.utbl tr{display:block;border:1px solid var(--line,#e3e8ec);border-radius:12px;margin-bottom:10px;padding:6px 4px}.utbl td{display:flex;justify-content:space-between;gap:10px;border:0;padding:5px 10px}.utbl td::before{content:attr(data-l);font-size:11px;font-weight:700;color:var(--fg3,#6b7a86);text-transform:uppercase}}
+#monTbl.monfit{width:100%;font-size:12.5px}#monTbl.monfit th,#monTbl.monfit td{padding:7px 6px;vertical-align:top}#monTbl.monfit th{font-size:11.5px}
 </style>
 </head>
 <body class="locked">
@@ -432,6 +436,7 @@ body.role-viewer .uplbox{display:none!important}
     <button class="tab on" id="tabMain"><span class="ic">📈</span><span><div class="t">Dashboard utama</div><div class="s">Ringkasan per bulan</div></span></button>
     <button class="tab" id="tabDet"><span class="ic">▦</span><span><div class="t">Detail NP</div><div class="s" id="tabDetS">– NP</div></span></button>
     <button class="tab" id="tabFU"><span class="ic">☎</span><span><div class="t">Follow Up Terjual</div><div class="s" id="tabFUS">Hari ini – H-7</div></span></button>
+    <button class="tab" id="tabMON" type="button"><span class="ic">🚚</span><span><div class="t">Monitoring PO &amp; TR</div><div class="s" id="tabMONS">Terjual &amp; stock</div></span></button>
     <button class="tab" id="tabUsr" type="button" hidden><span class="ic">👥</span><span><div class="t">Maintenance User</div><div class="s">Khusus Administrator</div></span></button>
     <button class="btn capbtn" id="tabCap" type="button" title="Capture halaman yang sedang dibuka jadi gambar">📷 Capture</button>
   </div>
@@ -486,6 +491,24 @@ body.role-viewer .uplbox{display:none!important}
         </div>
       </div>
       <div class="tblwrap"><table class="dt" id="tbl"></table></div>
+    </div>
+  </div>
+  <div id="viewMON" hidden>
+    <div class="card" style="position:relative">
+      <div class="uhead"><div><h2 style="margin:0">Monitoring PO &amp; TR</h2><div class="hint" id="monHint" style="margin:4px 0 0"></div></div></div>
+      <div class="fubar" id="monBar"></div>
+      <div class="mgextra" id="monFlt">
+        <div class="mgxo">
+          <span id="monDD" style="display:contents"></span>
+          <label>Cari<input type="search" id="monQ" placeholder="No PO/TR, item, NP, vendor/site, comment"></label>
+          <label>Vendor / Site asal<span id="monVenW"></span></label>
+          <label>Bulan PO/TR<span id="monMonW"></span></label>
+          <label>Master Brand<span id="monMbW"></span></label><label>Category<span id="monCatW"></span></label>
+          <button class="btn" id="monReset" type="button" hidden>Reset</button>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px"><div class="hint" id="monInfo" style="margin:0"></div><div style="display:flex;gap:8px;align-items:center" data-html2canvas-ignore="true"><select class="wamode" title="Pilih cara membuka chat WhatsApp di laptop ini"><option value="web">WA: WhatsApp Web</option><option value="app">WA: Aplikasi WhatsApp</option></select><button class="btn wav" id="monWa" type="button" title="Follow up vendor / site untuk PO/TR yang belum lengkap sesuai filter"><span class="wai"></span>WA Vendor</button><button class="btn" id="monXls" type="button">⬇ Unduh Excel</button><button class="btn" id="monCap" type="button" title="Capture kartu ini jadi gambar">📷 Capture</button><button class="btn" id="monPrev" type="button">‹</button><span id="monPg" class="hint" style="margin:0"></span><button class="btn" id="monNext" type="button">›</button></div></div>
+      <div class="tblwrap"><table class="dt" id="monTbl"></table></div>
     </div>
   </div>
   <div id="viewUsr" hidden>
@@ -551,11 +574,11 @@ function dayDiff(a,b){return Math.round((a-b)/864e5)}
 function mkey(d){return d.getFullYear()*100+d.getMonth()}
 function mlabel(k){return MN[k%100]+" "+Math.floor(k/100)}
 
-var PO_COLS={po:"PO No",np:"NP No",cm:"Comment",item:"Item No",st:"Status",od:"Order Date",rd:"Receiving Date",exp:"Expired PO Date",vendor:"Buy from Vendor Name",oq:"Ordered Qty",os:"Outstanding Quantity",rq:"Received Qty"};
-var TR_COLS={tr:"Original TR No",fromC:"Transfer From Code",fromN:"Transfer From Name",st:"Status",item:"Item Code",np:"Transfer To NP No",cm:"TR Comment",sd:"Sent Request Date",rdd:"Request Delivery Date",q:"TR Quantity",to:"TO No",toD:"TO Posting Date",toQ:"TO Quantity",ti:"TI No",tiD:"TI Posting Date",tiQ:"TI Quantity",osTO:"Outstanding TO Qty",exp:"Expired"};
+var PO_COLS={po:"PO No",np:"NP No",cm:"Comment",item:"Item No",st:"Status",od:"Order Date",rd:"Receiving Date",exp:"Expired PO Date",vendor:"Buy from Vendor Name",oq:"Ordered Qty",os:"Outstanding Quantity",rq:"Received Qty",nm:"Item Name|Item Description|Description|Item Desc",cat:"Category|Item Category",mb:"Master Brand",br:"Brand"};
+var TR_COLS={tr:"Original TR No",fromC:"Transfer From Code",fromN:"Transfer From Name",st:"Status",item:"Item Code",np:"Transfer To NP No",cm:"TR Comment",sd:"Sent Request Date",rdd:"Request Delivery Date",q:"TR Quantity",to:"TO No",toD:"TO Posting Date",toQ:"TO Quantity",ti:"TI No",tiD:"TI Posting Date",tiQ:"TI Quantity",osTO:"Outstanding TO Qty",exp:"Expired",nm:"Item Name|Item Description|Description|Item Desc",cat:"Item Category|Category",mb:"Master Brand Name",br:"Brand Name"};
 var KINDS={ots:{cols:COLS,hdr:"NPno",req:["np","type","pd"],name:"Report Outstanding Nota Penjualan WMS dan NAV"},
- po:{cols:PO_COLS,hdr:"PO No",req:["po","np","item"],name:"Report PO By Date"},
- tr:{cols:TR_COLS,hdr:"Original TR No",req:["tr","np","item"],name:"Transfer Request Status Detail"},
+ po:{cols:PO_COLS,hdr:"PO No",req:["po","item"],name:"Report PO By Date"},
+ tr:{cols:TR_COLS,hdr:"Original TR No",req:["tr","item"],name:"Transfer Request Status Detail"},
  nav:{hdr:"Ending Balance Qty",item:"No Item",qty:"Ending Balance Qty",name:"Inventory Movement"},
  wms:{hdr:"Stock On Hand Qty",item:"Item No",qty:"Stock On Hand Qty",loc:"Storage Location Id",name:"Report Stock Warehouse By Location"}};
 function compactStock(aoa,kind){
@@ -564,11 +587,11 @@ function compactStock(aoa,kind){
   if(hi<0)throw new Error("Header '"+K.hdr+"' tidak ditemukan.");
   var head=aoa[hi].map(norm),ii=head.indexOf(K.item),qi=head.indexOf(K.qty);
   if(ii<0||qi<0)throw new Error("Kolom '"+K.item+"' atau '"+K.qty+"' tidak ditemukan di file "+K.name+".");
-  var li=K.loc?head.indexOf(K.loc):-1;
-  var info=aoa.slice(0,hi).map(function(r){return (r||[]).filter(function(c){return c!=null&&c!==""}).join(" ")}).filter(Boolean),m={},lc={};
-  for(var j=hi+1;j<aoa.length;j++){var r=aoa[j]||[],it=norm(r[ii]);if(!it)continue;var q=num(r[qi]);m[it]=(m[it]||0)+q;
+  var li=K.loc?head.indexOf(K.loc):-1,ni=-1,ci=-1;["Item Description","Description","Item Name","Nama Item","Item Desc"].some(function(h){ni=head.indexOf(h);return ni>=0});["Item Category Description","Item Category","Category","Item Category Code"].some(function(h){ci=head.indexOf(h);return ci>=0});
+  var info=aoa.slice(0,hi).map(function(r){return (r||[]).filter(function(c){return c!=null&&c!==""}).join(" ")}).filter(Boolean),m={},lc={},nmm={},ctm={};
+  for(var j=hi+1;j<aoa.length;j++){var r=aoa[j]||[],it=norm(r[ii]);if(!it)continue;var q=num(r[qi]);m[it]=(m[it]||0)+q;if(ni>=0&&!nmm[it])nmm[it]=norm(r[ni]);if(ci>=0&&!ctm[it])ctm[it]=norm(r[ci]);
     if(li>=0&&q>0){var l=norm(r[li]);if(l){lc[it]=lc[it]||{};lc[it][l]=(lc[it][l]||0)+q}}}
-  return {info:info,rows:Object.keys(m).map(function(k){var a=[k,Math.round(m[k]*1000)/1000];if(li>=0)a.push(Object.keys(lc[k]||{}).sort().map(function(l){return l+":"+(Math.round(lc[k][l]*1000)/1000)}).join(", "));return a})};
+  return {info:info,rows:Object.keys(m).map(function(k){var a=[k,Math.round(m[k]*1000)/1000,li>=0?Object.keys(lc[k]||{}).sort().map(function(l){return l+":"+(Math.round(lc[k][l]*1000)/1000)}).join(", "):"",nmm[k]||"",ctm[k]||""];return a})};
 }
 function detectKind(aoa){
   for(var i=0;i<Math.min(aoa.length,30);i++){var r=(aoa[i]||[]).map(norm);
@@ -580,12 +603,12 @@ function compactK(aoa,kind){
   for(var i=0;i<Math.min(aoa.length,30);i++){if((aoa[i]||[]).some(function(c){return norm(c)===K.hdr})){hi=i;break}}
   if(hi<0)throw new Error("Header '"+K.hdr+"' tidak ditemukan.");
   var head=aoa[hi].map(function(c){return norm(c).toLowerCase()});
-  var idx={};ks.forEach(function(k){idx[k]=head.indexOf(C[k].toLowerCase())});
-  K.req.forEach(function(k){if(idx[k]<0)throw new Error("Kolom '"+C[k]+"' tidak ditemukan di file "+K.name+".")});
+  var idx={};ks.forEach(function(k){idx[k]=-1;C[k].split("|").some(function(h){idx[k]=head.indexOf(h.toLowerCase());return idx[k]>=0})});
+  K.req.forEach(function(k){if(idx[k]<0)throw new Error("Kolom '"+C[k].split("|")[0]+"' tidak ditemukan di file "+K.name+".")});
   var info=aoa.slice(0,hi).map(function(r){return (r||[]).filter(function(c){return c!=null&&c!==""}).join(" ")}).filter(Boolean);
   var rows=[];
   for(var j=hi+1;j<aoa.length;j++){
-    var r=aoa[j]||[];if(!norm(r[idx.np])&&!(kind!=="ots"&&idx.cm>=0&&/MS\d{16}/i.test(norm(r[idx.cm]))))continue;
+    var r=aoa[j]||[];if(kind==="ots"){if(!norm(r[idx.np]))continue}else if(!norm(r[idx[kind]])||!norm(r[idx.item]))continue; /* PO/TR: simpan semua baris (terjual & stock) untuk Monitoring PO & TR */
     rows.push(ks.map(function(k){var v=idx[k]<0?"":r[idx[k]];if(v instanceof Date)v=("0"+v.getDate()).slice(-2)+"-"+("0"+(v.getMonth()+1)).slice(-2)+"-"+v.getFullYear();return v==null?"":v}));
   }
   return {info:info,rows:rows};
@@ -693,7 +716,7 @@ function build(all){
     var nc=n.lines.filter(function(o){return o.srcSt!=="Consignment"});n.ready=n.t.src!=="STOK"&&nc.length>0&&nc.every(function(o){return o.srcSt==="Sudah datang sesuai qty"});
     n.hay=(n.np+" "+n.cust+" "+n.ph+" "+n.cp+" "+n.rc+" "+n.sales+" "+n.cm+" "+n.lines.map(function(o){return o.item+" "+o.itemNo+" "+(o.po||"")+" "+(o.trNo||"")}).join(" ")).toLowerCase();
   });
-  return {rep:rep,time:st.time,store:norm(store),lines:lines,nps:nps,cntPO:cntPO,cntTR:cntTR,cntCm:cntCm};
+  return {rep:rep,time:st.time,store:norm(store),lines:lines,nps:nps,cntPO:cntPO,cntTR:cntTR,cntCm:cntCm,potr:monBuild(all,lines)};
 }
 
 // ---------- state ----------
@@ -705,7 +728,7 @@ var tip=$("tip");
 function showTip(e,txt){tip.textContent=txt;tip.style.display="block";var x=e.clientX+12,y=e.clientY+12,w=tip.offsetWidth,h=tip.offsetHeight;if(x+w>innerWidth-8)x=e.clientX-w-12;if(y+h>innerHeight-8)y=e.clientY-h-12;tip.style.left=x+"px";tip.style.top=y+"px"}
 function hideTip(){tip.style.display="none"}
 function goDetail(f){F={grp:f.grp||"",sub:f.sub||"",rc:f.rc||"",mon:f.mon||"",age:f.age||"",src:f.src||"",ven:f.ven||"",ji:"",jiM:[],monM:f.mon?[String(f.mon)]:[]};F.mon="";PAGE=0;OPEN={};setView("det")}
-function setView(v){VIEW=v;document.body.classList.toggle("v-usr",v==="usr");$("viewUsr").hidden=v!=="usr";$("tabUsr").classList.toggle("on",v==="usr");$("viewMain").hidden=v!=="main";$("viewDet").hidden=v!=="det";$("viewFU").hidden=v!=="fu";$("tabMain").classList.toggle("on",v==="main");$("tabDet").classList.toggle("on",v==="det");$("tabFU").classList.toggle("on",v==="fu");$("tabCap").style.visibility=v==="det"?"":"hidden";render();if(v==="det")window.scrollTo(0,$("viewDet").offsetTop-10)}
+function setView(v){VIEW=v;$("viewMON").hidden=v!=="mon";$("tabMON").classList.toggle("on",v==="mon");document.body.classList.toggle("v-usr",v==="usr");document.body.classList.toggle("v-mon",v==="mon");$("viewUsr").hidden=v!=="usr";$("tabUsr").classList.toggle("on",v==="usr");$("viewMain").hidden=v!=="main";$("viewDet").hidden=v!=="det";$("viewFU").hidden=v!=="fu";$("tabMain").classList.toggle("on",v==="main");$("tabDet").classList.toggle("on",v==="det");$("tabFU").classList.toggle("on",v==="fu");$("tabCap").style.visibility=v==="det"?"":"hidden";render();if(v==="det")window.scrollTo(0,$("viewDet").offsetTop-10)}
 
 function render(){
   if(VIEW==="usr"){if(typeof renderUsr==="function")renderUsr();return}
@@ -713,10 +736,12 @@ function render(){
   var B=base();
   $("tabDetS").textContent=fn(B.length)+" NP";
   renderSum(B);
+  if(D.potr){var tj=D.potr.filter(function(x){return x.use==="Terjual"&&x.sisa>0&&!/Batal/.test(x.stat)}).length;$("tabMONS").textContent=fn(D.potr.length)+" PO/TR · "+fn(tj)+" terjual belum lengkap"}
   var FL=fuLines(B);$("tabFUS").textContent="Hari ini – H-7 · "+fn(FL.length)+" item";
   if(VIEW==="main"){renderMatrix(B);renderGroup("gG","G",B);renderGroup("gS","S",B);renderGroup("gA","A",B);renderType("gT",B);renderVendor("gV",B)}
   else if(VIEW==="fu")renderFU(FL);
   else if(VIEW==="usr")renderUsr();
+  else if(VIEW==="mon")renderMON();
   else renderDetail(B);
 }
 function renderSum(B){
@@ -1302,9 +1327,12 @@ function openVendor(){
     DCG.unshift({brand:ALLS,items:TA,all:1,pics:[{name:"Admin CUG",full:"Admin CUG (M10 Percetakan)",tel:"0819-9570-7204",wa:"6281995707204",sup:"Semua site internal",lbl:"Admin"}],seen:{}})}
   var fon=!!(FU.day||Object.keys(FU.sub).length||Object.keys(FU.type).length||Object.keys(FU.cat).length||Object.keys(FU.cf||{}).some(function(c){return mfOn(FU.cf[c])}));
   G=DCG.filter(function(d){return d.items.length||(!fon&&!d.br)}).concat(G);
+  vendorPopup(G,fn(G.filter(function(g){return DCG.indexOf(g)<0}).length)+" brand · "+fn(SRC.length)+" item OTS"+(TRC.length?" + "+fn(TRC.length)+" item OTS TR dari DC dan cabang lain (ke Admin CUG, tabel per cabang)":"")+". Rekap item vendor sesuai filter yang sedang aktif. Pesan sudah terisi, tinggal tekan kirim di WhatsApp.","WA Vendor");
+}
+function vendorPopup(G,hintTxt,ttl){
   var ov=el("div",{cls:"vov"}),bx=el("div",{cls:"vbox"});ov.appendChild(bx);ov.onclick=function(e){if(e.target===ov)ov.remove()};
-  var hd=el("div",{cls:"vhd"}),tt=el("div");tt.appendChild(el("div",{style:"font-weight:700;font-size:16px"},"WA Vendor"));
-  tt.appendChild(el("div",{cls:"hint",style:"margin:2px 0 0"},fn(G.filter(function(g){return DCG.indexOf(g)<0}).length)+" brand · "+fn(SRC.length)+" item OTS"+(TRC.length?" + "+fn(TRC.length)+" item OTS TR dari DC dan cabang lain (ke Admin CUG, tabel per cabang)":"")+". Rekap item vendor sesuai filter yang sedang aktif. Pesan sudah terisi, tinggal tekan kirim di WhatsApp."));
+  var hd=el("div",{cls:"vhd"}),tt=el("div");tt.appendChild(el("div",{style:"font-weight:700;font-size:16px"},ttl||"WA Vendor"));
+  tt.appendChild(el("div",{cls:"hint",style:"margin:2px 0 0"},hintTxt));
   hd.appendChild(tt);var cl=el("button",{cls:"btn",type:"button"},"Tutup");cl.onclick=function(){ov.remove()};hd.appendChild(cl);bx.appendChild(hd);
   var q=el("input",{type:"search",placeholder:"Cari brand atau nama PIC…",cls:"vq"});bx.appendChild(q);
   var list=el("div",{cls:"vlist"});bx.appendChild(list);
@@ -1337,7 +1365,7 @@ function capLabel(h){var t=h.querySelector("h2");if(t)return t.textContent;if(h.
 function capCard(host,btn){
   if(typeof html2canvas==="undefined"){toast("Fitur capture belum termuat. Coba muat ulang halaman.");return}
   try{mfClose()}catch(_){}
-  btn.disabled=true;btn.textContent="⏳";CAPLBL=capLabel(host);document.documentElement.classList.add("capnz");
+  var bt0=btn.textContent;btn.disabled=true;btn.textContent="⏳";CAPLBL=capLabel(host);document.documentElement.classList.add("capnz");
   var need=host.offsetWidth;
   host.querySelectorAll(".tblwrap,.mxw").forEach(function(w){var t=w.firstElementChild;if(t&&t.scrollWidth>w.clientWidth)need=Math.max(need,host.offsetWidth+(t.scrollWidth-w.clientWidth)+20)});
   host.setAttribute("data-capt","1");
@@ -1349,12 +1377,12 @@ function capCard(host,btn){
       var stn=doc.createElement("div");stn.textContent=(D&&D.store?D.store:"").toUpperCase();stn.style.cssText="font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--navy);padding-bottom:8px;border-bottom:1.5px solid var(--line)";top.appendChild(stn);
       if(h.querySelector("#mx")){var sm=doc.getElementById("sum");if(sm){var sc=sm.cloneNode(true);sc.removeAttribute("id");sc.style.margin="12px 0 0";sc.style.boxShadow="none";sc.style.background="#fff";top.appendChild(sc)}}
       h.insertBefore(top,h.firstChild)}};
-  function done(){host.removeAttribute("data-capt");document.documentElement.classList.remove("capnz");btn.disabled=false;btn.textContent="📷"}
+  function done(){host.removeAttribute("data-capt");document.documentElement.classList.remove("capnz");btn.disabled=false;btn.textContent=bt0}
   setTimeout(function(){html2canvas(host,opts).then(function(cv){done();showCap(cv,CAPLBL)},function(err){done();toast("Gagal membuat gambar: "+(err&&err.message||err))})},30);
 }
-function ensureCap(){document.querySelectorAll("#viewMain .card").forEach(function(h){
+function ensureCap(){document.querySelectorAll("#viewMain .card, #viewMON .card").forEach(function(h){
   if(h.hidden||!h.firstElementChild)return;
-  for(var i=0;i<h.children.length;i++)if(h.children[i].classList.contains("ccap"))return;
+  if(h.querySelector("#monCap"))return;for(var i=0;i<h.children.length;i++)if(h.children[i].classList.contains("ccap"))return;
   h.classList.add("cap-host");var b=el("button",{cls:"ccap",type:"button",title:"Capture kartu ini jadi gambar","data-html2canvas-ignore":"true"},"📷");
   b.onclick=function(e){e.stopPropagation();capCard(h,b)};h.appendChild(b)})}
 var capPend=false;new MutationObserver(function(){if(capPend)return;capPend=true;requestAnimationFrame(function(){capPend=false;ensureCap()})}).observe(document.querySelector(".wrap"),{childList:true,subtree:true});
@@ -1462,8 +1490,178 @@ function card(kind,label){
   var extra0=kind==="ots"?((D&&D.store?D.store+" · ":"")+fn(sn.rows.length)+" item"):kind==="po"?(fn(D?D.cntPO:0)+" item NP terisi nomor PO dari report ini"):kind==="tr"?(fn(D?D.cntTR:0)+" item NP terisi nomor TR dari report ini"):(fn(sn.rows.length)+" kode item");
   if(kind!=="ots"){var extra=extra0;c.appendChild(el("div",{cls:"s"},extra+" · "+SRCS[kind]))}
 }
+/* ===== Monitoring PO & TR: semua baris Report PO By Date & TR Status Detail, ditandai Terjual / Stock ===== */
+var MONF={use:[],kind:"",src:[],ship:[],st:[],pdd:[],ven:[],mon:[],cat:[],mb:[],q:""},MONS={k:"pd",d:1},MONP=0,MONCUR=[];
+function monBuild(all,lines){var t0=new Date(),D0=new Date(t0.getFullYear(),t0.getMonth(),t0.getDate());
+  var nm={},ct={};lines.forEach(function(o){var k=norm(o.itemNo);if(k&&!nm[k]){nm[k]=norm(o.item);ct[k]=norm(o.cat)}});
+  [all.wms,all.nav].forEach(function(S){if(S)S.rows.forEach(function(r){var k=norm(r[0]);if(r[3]&&!nm[k])nm[k]=norm(r[3]);if(r[4]&&!ct[k])ct[k]=norm(r[4])})});
+  var NPI={};lines.forEach(function(o){if(!NPI[o.np])NPI[o.np]=o});
+  var out=[];
+  function stOf(oq,rq,ds){if(oq>0&&rq>=oq)return "Sudah datang";if(/CANCEL|CLOSE|EXPIRE/i.test(ds||""))return rq>0?"Partial (dokumen ditutup)":"Batal / Expired";if(rq>0)return "Partial";return "Belum datang"}
+  function push(x){var nps=x.nps||[];x.use=nps.length?"Terjual":"Stock";x.nm=x.rn||nm[x.item]||"";x.cat=x.rc2||ct[x.item]||"";x.mb=norm(x.mb||"");x.sisa=Math.max(0,x.oq-x.rq);x.stat=stOf(x.oq,x.rq,x.ds);
+    var l=nps.map(function(n){return NPI[n]}).filter(Boolean)[0];x.np=nps.join(", ");x.cust=l?norm(l.cust):"";
+    var pm=String(x.cm||"").match(/PDD\s*[:.]?\s*(\d{1,2})\s*[\/\-.]\s*(\d{1,2})\s*[\/\-.]\s*(\d{2,4})/i);x.pdSrc="";x.pd=null;
+    if(x.use==="Terjual"){if(pm){var yy=+pm[3];if(yy<100)yy+=2000;x.pd=new Date(yy,+pm[2]-1,+pm[1]);x.pdSrc="comment"}else if(l&&l.pdD){x.pd=l.pdD;x.pdSrc="NP"}}
+    var cmu=String(x.cm||"").toUpperCase();x.ship=/(^|[^A-Z])TJ([^A-Z]|$)/.test(cmu)?"Kirim Toko":/(^|[^A-Z])CT([^A-Z]|$)/.test(cmu)?"Kirlang":"Lainnya";x.src=x.kind==="PO"?"Supplier":/(^|\s)DC(\s|$)/i.test(x.ven)?"DC":"Cabang";x.open=x.sisa>0&&!/Batal|ditutup/.test(x.stat);x.dd=x.pd?dayDiff(x.pd,D0):null;x.npOts=!!l;x.mk=x.dt?mkey(x.dt):0;
+    x.hay=(x.no+" "+x.item+" "+x.nm+" "+x.np+" "+x.cust+" "+x.ven+" "+x.cat+" "+(x.cm||"")).toLowerCase();out.push(x)}
+  if(all.po){var G={};toObjs(all.po,"po").forEach(function(r){if(!r.po||!r.item)return;var k=r.po+"|"+r.item,g=G[k];
+      if(!g){g=G[k]={kind:"PO",no:r.po,item:r.item,ds:r.st,dt:pdate(r.od),exp:pdate(r.exp),ven:norm(r.vendor),oq:num(r.oq),rq:0,rc:{},nps:[],last:null,cm:"",rn:""}}if(!g.cm&&r.cm)g.cm=r.cm;if(!g.rn&&r.nm)g.rn=r.nm;if(!g.rc2&&r.cat)g.rc2=r.cat;if(!g.mb&&r.mb)g.mb=r.mb;if(!g.br&&r.br)g.br=r.br;
+      var rk=(r.rd||"")+"|"+r.rq;if(!g.rc[rk]){g.rc[rk]=1;g.rq+=num(r.rq)}g.oq=Math.max(g.oq,num(r.oq));var d=pdate(r.rd);if(d&&(!g.last||d>g.last))g.last=d;
+      r.nps.forEach(function(n){if(g.nps.indexOf(n)<0)g.nps.push(n)})});
+    Object.keys(G).forEach(function(k){push(G[k])})}
+  if(all.tr){var T={};toObjs(all.tr,"tr").forEach(function(r){if(!r.tr||!r.item)return;var k=r.tr+"|"+r.item,g=T[k];
+      if(!g){g=T[k]={kind:"TR",no:r.tr,item:r.item,ds:r.st,dt:pdate(r.sd),exp:pdate(r.exp),ven:norm((r.fromC||"")+" "+(r.fromN||"")),oq:num(r.q),rq:0,ti:{},nps:[],last:null,rdd:pdate(r.rdd),cm:"",rn:""}}if(!g.cm&&r.cm)g.cm=r.cm;if(!g.rn&&r.nm)g.rn=r.nm;if(!g.rc2&&r.cat)g.rc2=r.cat;if(!g.mb&&r.mb)g.mb=r.mb;if(!g.br&&r.br)g.br=r.br;
+      g.oq=Math.max(g.oq,num(r.q));if(r.ti&&!g.ti[r.ti]){g.ti[r.ti]=1;g.rq+=num(r.tiQ);var d=pdate(r.tiD);if(d&&(!g.last||d>g.last))g.last=d}
+      if(/RELEAS|OPEN/i.test(r.st)||!g.ds)g.ds=r.st;r.nps.forEach(function(n){if(g.nps.indexOf(n)<0)g.nps.push(n)})});
+    Object.keys(T).forEach(function(k){push(T[k])})}
+  return out}
+var MONC=[
+ {k:"use",l:"Peruntukan",v:function(x){return x.use},f:function(x){return el("span",{cls:"rb "+(x.use==="Terjual"?"editor":"viewer")},x.use)}},
+ {k:"ship",l:"Pengiriman",v:function(x){return x.ship==="Lainnya"?"":x.ship},f:function(x){return x.ship==="Lainnya"?"–":el("span",{style:"white-space:nowrap;font-weight:700;color:"+(x.ship==="Kirlang"?"#a0480f":"#1d7a45")},x.ship)}},
+ {k:"kind",l:"Jenis",v:function(x){return x.kind}},
+ {k:"no",l:"No PO / TR",v:function(x){return x.no}},
+ {k:"dt",l:"Tgl PO / TR",v:function(x){return x.dt?+x.dt:0},f:function(x){return fd(x.dt)}},
+ {k:"ven",l:"Vendor / Dari Site",v:function(x){return x.ven}},
+ {k:"item",l:"Item No",v:function(x){return x.item}},
+ {k:"nm",l:"Item Name",v:function(x){return x.nm},f:function(x){return x.nm||el("span",{cls:"hint",style:"margin:0"},"(nama belum ada)")}},
+ {k:"cat",l:"Category",v:function(x){return x.cat}},
+ {k:"oq",l:"Qty PO / TR",n:1,v:function(x){return x.oq},f:function(x){return fn(x.oq)}},
+ {k:"rq",l:"Qty diterima",n:1,v:function(x){return x.rq},f:function(x){return fn(x.rq)}},
+ {k:"sisa",l:"Sisa",n:1,v:function(x){return x.sisa},f:function(x){return x.sisa?el("b",null,fn(x.sisa)):"0"}},
+ {k:"stat",l:"Status kedatangan",v:function(x){return x.stat},f:function(x){var c=x.stat==="Sudah datang"?"#1d7a45":x.stat==="Belum datang"?"#c0392b":/Batal/.test(x.stat)?"#6b7a86":"#b7791f";return el("b",{style:"color:"+c},x.stat)}},
+ {k:"ds",l:"Status dokumen",v:function(x){return x.ds}},
+ {k:"last",l:"Terakhir diterima",v:function(x){return x.last?+x.last:0},f:function(x){return x.last?fd(x.last):"–"}},
+ {k:"exp",l:"Expired",v:function(x){return x.exp?+x.exp:0},f:function(x){return x.exp?fd(x.exp):"–"}},
+ {k:"cm",l:"Comment PO / TR",v:function(x){return x.cm||""},f:function(x){return el("span",{style:"display:block;min-width:220px;white-space:normal"},x.cm||"–")}}];
+MONC.unshift({k:"pd",l:"PDD",v:function(x){return x.pd?+x.pd:0},f:function(x){if(!x.pd)return x.use==="Terjual"?el("span",{cls:"hint",style:"margin:0"},"(tidak ada PDD)"):"–";var w=el("div",{style:"white-space:nowrap"});w.appendChild(el("b",null,fd(x.pd)));
+  var d=x.dd,t=d<0?"Lewat "+(-d)+" hari":d===0?"Hari ini":d+" hari lagi",c=!x.open?"var(--fg3)":d<0?"#c0392b":d<=3?"#b7791f":"#1d7a45";w.appendChild(el("div",{style:"font-size:11.5px;font-weight:700;color:"+c},t+(x.open?"":" · selesai")));if(x.pdSrc==="NP")w.appendChild(el("div",{style:"font-size:10.5px;color:var(--fg3)"},"dari NP"));return w}});
+function monSub(t,st){return el("div",{style:"font-size:11px;color:var(--fg3);margin-top:2px;"+(st||"")},t)}
+function monCol(k){return MONC.filter(function(c){return c.k===k})[0]}
+function monCell(k,x){var c=monCol(k),v=c.f?c.f(x):c.v(x);if(v&&v.nodeType)return v;return document.createTextNode(v==null||v===""?"–":String(v))}
+var MOND=[
+ {k:"pd",l:"PDD",w:"92px",f:function(x){return monCell("pd",x)}},
+ {k:"use",l:"Peruntukan",w:"96px",f:function(x){var w=el("div");w.appendChild(monCell("use",x));if(x.ship!=="Lainnya"){var s=monCell("ship",x);s.style.display="block";s.style.marginTop="3px";s.style.fontSize="12px";w.appendChild(s)}return w}},
+ {k:"no",l:"No PO / TR",w:"150px",f:function(x){var w=el("div");w.appendChild(el("div",{style:"font-weight:600;font-size:11.5px;white-space:nowrap;letter-spacing:-.1px"},x.no));w.appendChild(monSub(x.kind+" · "+(x.dt?fd(x.dt):"–")));return w}},
+ {k:"ven",l:"Vendor / Dari Site",w:"130px",f:function(x){return el("div",{style:"font-size:12px;line-height:1.3"},x.ven||"–")}},
+ {k:"nm",l:"Item",f:function(x){var w=el("div",{style:"min-width:130px"});w.appendChild(el("div",{style:"line-height:1.3"},x.nm||"(nama belum ada)"));w.appendChild(monSub(x.item+(x.cat?" · "+x.cat:"")));return w}},
+ {k:"oq",l:"Qty",n:1,w:"70px",f:function(x){var w=el("div");w.appendChild(el("div",null,fn(x.oq)));w.appendChild(monSub("terima "+fn(x.rq),"white-space:nowrap"));return w}},
+ {k:"sisa",l:"Sisa",n:1,w:"46px",f:function(x){return monCell("sisa",x)}},
+ {k:"stat",l:"Status",w:"112px",f:function(x){var w=el("div");w.appendChild(monCell("stat",x));if(x.ds)w.appendChild(monSub(x.ds));if(x.last)w.appendChild(monSub("terima "+fd(x.last)));return w}},
+ {k:"exp",l:"Expired",w:"74px",f:function(x){return el("span",{style:"font-size:12px;white-space:nowrap"},x.exp?fd(x.exp):"–")}},
+ {k:"cm",l:"Comment PO / TR",f:function(x){return el("div",{style:"min-width:120px;font-size:11.5px;line-height:1.3;white-space:normal;word-break:break-word;color:var(--fg2)"},x.cm||"–")}}];
+function monKey(x,k){return k==="st"?(/Batal|ditutup/.test(x.stat)?"Batal":x.stat):k==="pdd"?(!x.pd?"none":x.dd<0?"late":"notlate"):x[k]}
+function monMatch(x,skip){var K=["use","src","ship","st","pdd"];for(var i=0;i<K.length;i++){var k=K[i];if(skip!==k&&MONF[k].length&&MONF[k].indexOf(monKey(x,k))<0)return false}
+  if(skip!=="ven"&&MONF.ven.length&&MONF.ven.indexOf(x.ven||"(kosong)")<0)return false;if(skip!=="mon"&&MONF.mon.length&&MONF.mon.indexOf(x.mk?mlabel(x.mk):"(tanpa tanggal)")<0)return false;
+  if(skip!=="cat"&&MONF.cat.length&&MONF.cat.indexOf(x.cat||"(Tanpa category)")<0)return false;if(skip!=="mb"&&MONF.mb.length&&MONF.mb.indexOf(x.mb||"(Tanpa master brand)")<0)return false;
+  if(skip!=="q"&&MONF.q){var h=x.hay;if(MONF.q.toLowerCase().split(/\s+/).some(function(w){return w&&h.indexOf(w)<0}))return false}return true}
+function renderMON(){var L=(D&&D.potr)||[];
+  $("monHint").textContent=L.length?"Semua baris Report PO By Date dan Transfer Request Status Detail. Terjual = PO/TR yang tercatat untuk NP (No NP di kolom NP / comment), Stock = tanpa NP. PDD diambil dari Comment PO/TR (tulisan PDD dd/mm/yyyy); bila tidak ada, dari PDD NP. Urutan: yang belum lengkap dulu, PDD lewat/terdekat paling atas. Qty diterima: PO dari Received Qty, TR dari TI Quantity.":"Upload Report PO By Date dan/atau Transfer Request Status Detail untuk melihat monitoring.";
+  var bar=$("monBar");bar.innerHTML="";bar.classList.add("mgbar");
+  function set(k,v){var a=MONF[k],i=a.indexOf(v);if(i>=0)a.splice(i,1);else a.push(v);MONP=0;renderMON()}
+  /* semua filter: dropdown pilihan ganda (Cari pilihan, Pilih semua, Hapus, Selesai) */
+  var nf=(MONF.q?1:0)+["use","src","ship","st","pdd","ven","mon","cat","mb"].filter(function(k){return MONF[k].length}).length;
+  var top=el("div",{cls:"mgtop","data-html2canvas-ignore":"true"});top.appendChild(el("div",{cls:"hint",style:"margin:0"},nf?nf+" filter aktif":"Semua filter bisa pilih lebih dari satu."));
+  var rs=el("button",{cls:"btn",type:"button",title:"Hapus semua filter"},"✕ Reset semua filter");rs.disabled=!nf;rs.onclick=function(){$("monReset").click()};top.appendChild(rs);bar.appendChild(top);
+  var dd=$("monDD");dd.innerHTML="";
+  function drop(label,key,opts,pick){var base=L.filter(function(x){return monMatch(x,key)}),cnt={},LB={},KY={};opts.forEach(function(o){LB[o[0]]=o[1];KY[o[1]]=o[0];cnt[o[1]]=0});base.forEach(function(x){var l=LB[pick(x)];if(l!=null)cnt[l]++});
+    var lab=el("label",null,label);lab.appendChild(mfBtn(label,opts.map(function(o){return o[1]}),MONF[key].map(function(k){return LB[k]}).filter(Boolean),function(sel){MONF[key]=sel.map(function(l){return KY[l]});MONP=0;renderMON()},cnt));dd.appendChild(lab)}
+  drop("Peruntukan","use",[["Terjual","Terjual"],["Stock","Stock"]],function(x){return x.use});
+  drop("Sumber","src",[["Supplier","PO · Supplier"],["DC","TR · DC"],["Cabang","TR · Cabang"]],function(x){return x.src});
+  drop("Pengiriman","ship",[["Kirim Toko","Kirim Toko (TJ)"],["Kirlang","Kirlang (CT)"],["Lainnya","Tanpa kode"]],function(x){return x.ship});
+  drop("Status kedatangan","st",[["Belum datang","Belum datang"],["Partial","Partial"],["Sudah datang","Sudah datang"],["Batal","Batal / Expired"]],function(x){return monKey(x,"st")});
+  drop("PDD","pdd",[["late","Lewat PDD"],["notlate","Belum lewat PDD"],["none","Tanpa PDD"]],function(x){return monKey(x,"pdd")});
+  function ms(id,ttl,key,valOf){var c={};L.filter(function(x){return monMatch(x,key)}).forEach(function(x){var v=valOf(x);c[v]=(c[v]||0)+1});var V=Object.keys(c).sort();var w=$(id);w.innerHTML="";w.appendChild(mfBtn(ttl,V,MONF[key],function(sel){MONF[key]=sel;MONP=0;renderMON()},c))}
+  ms("monVenW","Vendor / Site","ven",function(x){return x.ven||"(kosong)"});ms("monMbW","Master Brand","mb",function(x){return x.mb||"(Tanpa master brand)"});ms("monCatW","Category","cat",function(x){return x.cat||"(Tanpa category)"});
+  (function(){var c={},keys={};L.filter(function(x){return monMatch(x,"mon")}).forEach(function(x){var v=x.mk?mlabel(x.mk):"(tanpa tanggal)";c[v]=(c[v]||0)+1;keys[v]=x.mk||0});var V=Object.keys(c).sort(function(a,b){return keys[b]-keys[a]});var w=$("monMonW");w.innerHTML="";w.appendChild(mfBtn("Bulan PO/TR",V,MONF.mon,function(sel){MONF.mon=sel;MONP=0;renderMON()},c))})();
+  var R=L.filter(function(x){return monMatch(x)});var col=MONC.filter(function(c){return c.k===MONS.k})[0]||MONC[0];
+  if(col.k==="pd")R.sort(function(a,b){var oa=a.open?0:1,ob=b.open?0:1;if(oa!==ob)return oa-ob;var pa=a.pd?+a.pd:Infinity,pb=b.pd?+b.pd:Infinity;if(pa!==pb)return (pa<pb?-1:1)*MONS.d;return String(a.no).localeCompare(String(b.no))});else
+  R.sort(function(a,b){var va=col.v(a),vb=col.v(b);var r=typeof va==="number"?va-vb:String(va).localeCompare(String(vb));return r*MONS.d||String(a.no).localeCompare(String(b.no))});MONCUR=R;
+  var tot={oq:0,rq:0,s:0};R.forEach(function(x){tot.oq+=x.oq;tot.rq+=x.rq;tot.s+=x.sisa});
+  var PS=100,pages=Math.max(1,Math.ceil(R.length/PS));if(MONP>=pages)MONP=pages-1;
+  $("monInfo").textContent=fn(R.length)+" baris PO/TR · Qty "+fn(tot.oq)+" · diterima "+fn(tot.rq)+" · sisa "+fn(tot.s)+". Klik judul kolom untuk mengurutkan.";$("monPg").textContent=(MONP+1)+" / "+pages;$("monPrev").disabled=MONP<=0;$("monNext").disabled=MONP>=pages-1;
+  var t=$("monTbl");t.innerHTML="";t.classList.add("monfit");var th=el("thead"),h=el("tr");MOND.forEach(function(c){var x=el("th",{style:"cursor:pointer;white-space:nowrap"+(c.w?";width:"+c.w:"")+(c.n?";text-align:right":"")},c.l+(MONS.k===c.k?(MONS.d>0?" ▲":" ▼"):""));x.onclick=function(){if(MONS.k===c.k)MONS.d=-MONS.d;else{MONS.k=c.k;MONS.d=c.n||c.k==="dt"?-1:1}MONP=0;renderMON()};h.appendChild(x)});th.appendChild(h);t.appendChild(th);
+  var tb=el("tbody");R.slice(MONP*PS,(MONP+1)*PS).forEach(function(x){var tr=el("tr");MOND.forEach(function(c){var d=el("td",{style:c.n?"text-align:right":""}),v=c.f?c.f(x):c.v(x);if(v&&v.nodeType)d.appendChild(v);else d.textContent=v==null||v===""?"–":v;tr.appendChild(d)});tb.appendChild(tr)});
+  if(!R.length){var tr=el("tr"),d=el("td",{colspan:String(MOND.length),style:"text-align:center;padding:20px;color:var(--fg3)"},L.length?"Tidak ada PO/TR sesuai filter.":"Belum ada data PO/TR.");tr.appendChild(d);tb.appendChild(tr)}
+  t.appendChild(tb)}
+$("monQ").addEventListener("input",function(){var v=this.value;clearTimeout(window._monT);window._monT=setTimeout(function(){MONF.q=v.trim();MONP=0;renderMON()},250)});
+$("monReset").onclick=function(){MONF={use:[],kind:"",src:[],ship:[],st:[],pdd:[],ven:[],mon:[],cat:[],mb:[],q:""};$("monQ").value="";MONP=0;renderMON()};
+$("monPrev").onclick=function(){if(MONP>0){MONP--;renderMON()}};$("monNext").onclick=function(){MONP++;renderMON()};
+function xlsxStyled(XL,u8,o){
+  var z=XL.CFB.read(u8,{type:"array"});
+  function f(p){return z.FileIndex[z.FullPaths.indexOf("Root Entry/"+p)]}
+  function str(b){return new TextDecoder().decode(b instanceof Uint8Array?b:new Uint8Array(b))}
+  function put(p,s){f(p).content=new TextEncoder().encode(s);f(p).size=f(p).content.length}
+  // bases: [fontId, fillId, numFmt, hAlign, wrap]
+  var B=o.bases,N=B.length,xf=[],bd='<border><left style="thin"><color rgb="FFC9D3D9"/></left><right style="thin"><color rgb="FFC9D3D9"/></right><top style="thin"><color rgb="FFC9D3D9"/></top><bottom style="thin"><color rgb="FFC9D3D9"/></bottom><diagonal/></border>';
+  xf.push('<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>');
+  [0,1].forEach(function(z2){B.forEach(function(b){var fill=b[1]||(z2?3:0);
+    xf.push('<xf numFmtId="'+(b[2]||0)+'" fontId="'+b[0]+'" fillId="'+fill+'" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="'+(b[5]||"top")+'"'+(b[3]?' horizontal="'+b[3]+'"':'')+(b[4]?' wrapText="1"':'')+'/></xf>')})});
+  var fonts=['<font><sz val="11"/><color rgb="FF1F2A30"/><name val="Calibri"/><family val="2"/></font>','<font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/><family val="2"/></font>','<font><b/><sz val="11"/><color rgb="FF1F2A30"/><name val="Calibri"/><family val="2"/></font>','<font><b/><sz val="11"/><color rgb="FFC0392B"/><name val="Calibri"/><family val="2"/></font>','<font><b/><sz val="11"/><color rgb="FF1D7A45"/><name val="Calibri"/><family val="2"/></font>','<font><b/><sz val="11"/><color rgb="FFB7791F"/><name val="Calibri"/><family val="2"/></font>','<font><sz val="11"/><color rgb="FF6B7A86"/><name val="Calibri"/><family val="2"/></font>'];
+  var sty='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="d mmm yyyy"/></numFmts><fonts count="'+fonts.length+'">'+fonts.join("")+'</fonts><fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF0F4A52"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF3F7F8"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>'+bd+'</borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="'+xf.length+'">'+xf.join("")+'</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles><dxfs count="0"/><tableStyles count="0"/></styleSheet>';
+  put("xl/styles.xml",sty);
+  var sh=str(f("xl/worksheets/sheet1.xml").content);
+  function ci(L){var n=0;for(var i=0;i<L.length;i++)n=n*26+L.charCodeAt(i)-64;return n-1}
+  sh=sh.replace(/<c r="([A-Z]+)(\d+)"/g,function(m,L,R){var r=+R-1,c=ci(L),b=o.style(r,c);return m+' s="'+(1+b+(r>0&&r%2===0?N:0))+'"'});
+  sh=sh.replace('<row r="1">','<row r="1" ht="'+(o.headH||32)+'" customHeight="1">');
+  sh=sh.replace('<sheetView workbookViewId="0"/>','<sheetView workbookViewId="0" zoomScale="'+(o.zoom||100)+'"><pane ySplit="1" xSplit="'+(o.xSplit||0)+'" topLeftCell="'+(o.xSplit?String.fromCharCode(65+o.xSplit):"A")+'2" activePane="bottomRight" state="frozen"/><selection pane="bottomRight"/></sheetView>');
+  if(!o.xSplit)sh=sh.replace('activePane="bottomRight"','activePane="bottomLeft"').replace('<selection pane="bottomRight"/>','<selection pane="bottomLeft"/>');
+  var pg='<pageMargins left="0.3" right="0.3" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape"/>';
+  sh=sh.indexOf("<ignoredErrors")>=0?sh.replace("<ignoredErrors",pg+"<ignoredErrors"):sh.replace("</worksheet>",pg+"</worksheet>");
+  put("xl/worksheets/sheet1.xml",sh);
+  var wbx=str(f("xl/workbook.xml").content);
+  return XL.CFB.write(z,{fileType:"zip",type:"array",compression:true});
+}
+
+$("monCap").onclick=function(e){e.stopPropagation();var h=this.closest(".card");capCard(h,this)};
+function xSer(d){return d?(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-Date.UTC(1899,11,30))/864e5:""}
+$("monXls").onclick=function(){if(!MONCUR.length){toast("Tidak ada baris untuk diunduh.");return}
+  if(typeof XLSX==="undefined"){toast("Fitur Excel belum termuat. Coba muat ulang halaman.");return}
+  var btn=this;
+  var MX=[["PDD",12,"d",function(x){return xSer(x.pd)}],
+   ["Keterangan PDD",22,"pdk",function(x){if(!x.pd)return x.use==="Terjual"?"Tidak ada PDD":"";var d=x.dd;return (d<0?"Lewat "+(-d)+" hari":d===0?"Hari ini":d+" hari lagi")+(x.open?"":" (selesai)")+(x.pdSrc==="NP"?" · PDD dari NP":"")}],
+   ["Peruntukan",11,"t",function(x){return x.use}],["Pengiriman",12,"t",function(x){return x.ship==="Lainnya"?"":x.ship}],
+   ["Sumber",10,"t",function(x){return x.src}],["Jenis",7,"c",function(x){return x.kind}],
+   ["No PO / TR",22,"b",function(x){return x.no}],["Tgl PO / TR",12,"d",function(x){return xSer(x.dt)}],
+   ["Vendor / Dari Site",32,"w",function(x){return x.ven}],["Item No",12,"t",function(x){return x.item}],
+   ["Item Name",50,"w",function(x){return x.nm}],["Category",18,"w",function(x){return x.cat}],
+   ["Master Brand",18,"w",function(x){return x.mb||""}],["Brand",18,"w",function(x){return x.br||""}],
+   ["Qty PO / TR",10,"n",function(x){return x.oq}],["Qty diterima",10,"n",function(x){return x.rq}],["Sisa",8,"nb",function(x){return x.sisa}],
+   ["Status kedatangan",16,"st",function(x){return x.stat}],["Status dokumen",14,"w",function(x){return x.ds||""}],
+   ["Terakhir diterima",13,"d",function(x){return xSer(x.last)}],["Expired",12,"d",function(x){return xSer(x.exp)}],
+   ["Comment PO / TR",48,"w",function(x){return x.cm||""}]];
+  var aoa=[MX.map(function(c){return c[0]})].concat(MONCUR.map(function(x){return MX.map(function(c){var v=c[3](x);return v==null?"":v})}));
+  var ws=XLSX.utils.aoa_to_sheet(aoa);ws["!cols"]=MX.map(function(c){return {wch:c[1]}});
+  ws["!autofilter"]={ref:XLSX.utils.encode_range({s:{r:0,c:0},e:{r:aoa.length-1,c:MX.length-1}})};
+  var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Monitoring PO TR");
+  var u8=new Uint8Array(XLSX.write(wb,{bookType:"xlsx",type:"array"}));
+  var BS=[[1,2,0,"center",1,"center"],[0,0,0,"",0],[0,0,0,"",1],[0,0,3,"right"],[2,0,3,"right"],[0,0,164,"center"],[3,0,0,"",1],[4,0,0,"",1],[5,0,0,"",1],[6,0,0,"",1],[2,0,0,"",0],[0,0,0,"center",0]];
+  var out;try{out=xlsxStyled(XLSX,u8,{bases:BS,xSplit:0,style:function(r,c){if(r===0)return 0;var t=MX[c][2],v=aoa[r][c];
+    if(t==="d")return 5;if(t==="n")return 3;if(t==="nb")return 4;if(t==="w")return 2;if(t==="b")return 10;if(t==="c")return 11;
+    if(t==="st")return v==="Sudah datang"?7:v==="Belum datang"?6:v==="Partial"?8:9;
+    if(t==="pdk")return /selesai/.test(v)?9:/^Lewat/.test(v)?6:/^Hari ini/.test(v)?8:/hari lagi/.test(v)?7:1;return 1}})}catch(e){out=u8}
+  var d=new Date(),fnm="Monitoring-PO-TR-"+d.getFullYear()+("0"+(d.getMonth()+1)).slice(-2)+("0"+d.getDate()).slice(-2)+"-"+("0"+d.getHours()).slice(-2)+("0"+d.getMinutes()).slice(-2)+".xlsx";
+  var blob=new Blob([out],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),n=MONCUR.length;
+  function ok(){btn.textContent="Terunduh ✓ ("+fn(n)+" baris)";setTimeout(function(){btn.textContent="⬇ Unduh Excel"},2500)}
+  if(DLNS){DLNS.save({filename:fnm,data:blob}).then(ok,function(e){if(e&&e.code!=="declined")toast("Gagal mengunduh ("+(e&&e.code||"error")+").")})}
+  else{try{var u=URL.createObjectURL(blob),a=el("a",{href:u,download:fnm});document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000);ok()}catch(e){toast("Unduh tidak tersedia di tampilan ini.")}}
+};
+$("tabMON").onclick=function(){setView("mon")};
+/* WA Vendor dari Monitoring PO & TR: hanya PO/TR yang belum lengkap (belum datang / partial) sesuai filter */
+function monAsItem(x){var nps=String(x.np||"").split(/,\s*/).filter(Boolean);var o={t:{src:x.kind},itemNo:x.item,item:x.nm||x.item,brand:x.br||"",mbrand:x.mb||"",vendor:x.ven,cm:x.cm||"",srcSt:x.rq>0?"Partial":"Belum datang"};
+  if(x.kind==="PO"){o.po=x.no;o.poR={po:x.no,oq:x.oq,rq:x.rq,st:x.ds,vendor:x.ven}}else{o.trNo=x.no;o.trR={tr:x.no,q:x.oq,tiQ:x.rq,st:x.ds,fromC:x.ven,fromN:""};o.trFrom=x.ven}
+  return {n:{np:nps[0]||(x.use==="Stock"?"Stock":"-"),pdD:x.pd},o:o}}
+$("monWa").onclick=function(){var OPEN=MONCUR.filter(function(x){return x.open});if(!OPEN.length){toast("Tidak ada PO/TR yang belum lengkap pada filter ini.");return}
+  var ADM={name:"Admin CUG",full:"Admin CUG (M10 Percetakan)",tel:"0819-9570-7204",wa:"6281995707204",lbl:"Admin"};
+  var POs=OPEN.filter(function(x){return x.kind==="PO"}).map(monAsItem),TRs=OPEN.filter(function(x){return x.kind==="TR"}).map(monAsItem);
+  var g={};POs.forEach(function(x){var b=norm(x.o.mbrand)||norm(x.o.vendor)||"(tanpa brand)";var r=g[b]||(g[b]={brand:b,items:[],pics:[],seen:{}});r.items.push(x);picFor(x.o).forEach(function(p){var k=p.wa||p.name;if(!r.seen[k]){r.seen[k]=1;r.pics.push(p)}})});
+  var GP=Object.keys(g).map(function(k){return g[k]}).sort(function(a,b){return (b.pics.length?1:0)-(a.pics.length?1:0)||b.items.length-a.items.length||(a.brand<b.brand?-1:1)});
+  GP.forEach(function(r){r.items.sort(function(a,b){return (a.n.pdD||0)-(b.n.pdD||0)||(a.o.po<b.o.po?-1:1)})});
+  var GT=[];if(TRs.length){var TA=TRs.slice().sort(function(a,b){return siteOf(a.o).localeCompare(siteOf(b.o))||(a.n.pdD||0)-(b.n.pdD||0)||(a.o.trNo<b.o.trNo?-1:1)});GT.push({brand:ALLS,items:TA,pics:[Object.assign({sup:"Semua site internal"},ADM)],seen:{}});
+    var BS={};TA.forEach(function(x){var s=siteOf(x.o);(BS[s]=BS[s]||[]).push(x)});Object.keys(BS).sort().forEach(function(s){GT.push({brand:"OTS TR ke "+s,items:BS[s],pics:[Object.assign({sup:s},ADM)],seen:{}})})}
+  vendorPopup(GT.concat(GP),fn(GP.length)+" brand/vendor · "+fn(POs.length)+" item PO"+(TRs.length?" + "+fn(TRs.length)+" item TR dari DC/cabang (ke Admin CUG)":"")+". Hanya PO/TR yang belum lengkap (Belum datang / Partial) sesuai filter Monitoring yang sedang aktif. Pesan sudah terisi, tinggal tekan kirim di WhatsApp.","WA Vendor · Monitoring PO & TR")};
+
 function applyAll(){
-  if(!SNAPS.ots)return;
+  if(!SNAPS.ots){if(SNAPS.po||SNAPS.tr){D=D||null}return}
   PICIDX=null;PICC={};D=build(SNAPS);D.cntPIC=D.lines.filter(function(o){return picFor(o).length}).length;cards();OPEN={};render();
 }
 var db=null,canWrite=null;
@@ -1487,7 +1685,7 @@ $("file").onchange=function(){
     var i=0;(function next(){if(i<rs.length){saveShared(rs[i].kind,rs[i].snap,rs[i].name).then(function(ok){if(ok===false)return;i++;next()})}})();
   },function(err){msg("Gagal: "+err.message)});
 };
-var CHK={ots:250,po:250,tr:250,nav:3000,wms:3000,pic:1000},PFX={ots:"",po:"po_",tr:"tr_",nav:"nav_",wms:"wms_",pic:"pic_"};
+var CHK={ots:250,po:1000,tr:1000,nav:3000,wms:3000,pic:1000},PFX={ots:"",po:"po_",tr:"tr_",nav:"nav_",wms:"wms_",pic:"pic_"};
 function saveShared(kind,snap,name){
   if(!db){msg("Data tampil di layar ini saja (penyimpanan bersama tidak tersedia).");return Promise.resolve()}
   if(canWrite===false){msg("Data tampil di layar ini saja. Hanya pemilik/editor yang bisa menyimpan untuk semua orang.");return Promise.resolve()}
