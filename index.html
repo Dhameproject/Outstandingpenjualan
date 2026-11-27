@@ -45,11 +45,11 @@ body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 system-ui,-app
 .capbtn{justify-self:end;align-self:center;padding:10px 16px;font-weight:700}
 .capbtn:disabled{cursor:wait;opacity:.7}
 @media(max-width:900px){.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.capbtn{grid-column:1/-1;justify-self:stretch}}
-.capov .vbox{padding:0;overflow:hidden;border-radius:14px}
+.capov{padding:12px!important;align-items:center!important}.capov .vbox{padding:0;overflow:hidden;border-radius:14px;max-height:calc(100vh - 24px)!important;display:flex;flex-direction:column}
 .caphd{background:var(--navy);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .caphd b{font-size:18px;font-weight:800}.caphd span{font-size:13px;opacity:.85}
-.capbody{padding:14px;background:#eef1f5;overflow:auto;flex:1}.capbody img{display:block;max-width:100%;margin:0 auto;box-shadow:0 2px 10px rgba(15,22,40,.12);border-radius:6px;background:#fff}
-.capft{display:flex;justify-content:flex-end;gap:10px;padding:12px 16px;flex-wrap:wrap;border-top:1px solid var(--line);background:#fff}
+.capbody{padding:14px;background:#eef1f5;overflow:auto;flex:1 1 auto;min-height:0}.capbody img{display:block;max-width:100%;margin:0 auto;box-shadow:0 2px 10px rgba(15,22,40,.12);border-radius:6px;background:#fff}
+.capft{display:flex;justify-content:flex-end;gap:10px;padding:10px 16px;flex-wrap:wrap;border-bottom:1px solid var(--line);background:#fff;flex:none}.caphd{flex:none}
 .capft button{font:inherit;font-weight:700;font-size:14px;border:0;border-radius:9px;padding:11px 18px;cursor:pointer;color:#fff}
 .capft .b1{background:#4a5bb0}.capft .b2{background:#3f7f5b}.capft .b3{background:#d64545}
 #capRep{position:absolute;left:-20000px;top:0;background:#fff;padding:22px 24px 26px;font-family:"Plus Jakarta Sans",Arial,sans-serif;color:#151a26}
@@ -431,7 +431,7 @@ body.role-viewer .uplbox{display:none!important}
   <div class="tabs">
     <button class="tab on" id="tabMain"><span class="ic">📈</span><span><div class="t">Dashboard utama</div><div class="s">Ringkasan per bulan</div></span></button>
     <button class="tab" id="tabDet"><span class="ic">▦</span><span><div class="t">Detail NP</div><div class="s" id="tabDetS">– NP</div></span></button>
-    <button class="tab" id="tabFU"><span class="ic">☎</span><span><div class="t">Follow Up Terjual</div><div class="s" id="tabFUS">H-1 sampai H-7</div></span></button>
+    <button class="tab" id="tabFU"><span class="ic">☎</span><span><div class="t">Follow Up Terjual</div><div class="s" id="tabFUS">Hari ini – H-7</div></span></button>
     <button class="tab" id="tabUsr" type="button" hidden><span class="ic">👥</span><span><div class="t">Maintenance User</div><div class="s">Khusus Administrator</div></span></button>
     <button class="btn capbtn" id="tabCap" type="button" title="Capture halaman yang sedang dibuka jadi gambar">📷 Capture</button>
   </div>
@@ -713,7 +713,7 @@ function render(){
   var B=base();
   $("tabDetS").textContent=fn(B.length)+" NP";
   renderSum(B);
-  var FL=fuLines(B);$("tabFUS").textContent="H-1 sampai H-7 · "+fn(FL.length)+" item";
+  var FL=fuLines(B);$("tabFUS").textContent="Hari ini – H-7 · "+fn(FL.length)+" item";
   if(VIEW==="main"){renderMatrix(B);renderGroup("gG","G",B);renderGroup("gS","S",B);renderGroup("gA","A",B);renderType("gT",B);renderVendor("gV",B)}
   else if(VIEW==="fu")renderFU(FL);
   else if(VIEW==="usr")renderUsr();
@@ -1112,10 +1112,10 @@ function refBox(o,n){var R=o.refs,row=el("tr",{cls:"mrefr"}),td=el("td",{colspan
 // ---------- follow up terjual ----------
 var FU={day:0,sub:{},type:{},ready:{},cat:{}},FUCUR=[],FUCATS=[];
 function readyOf(o){if(o.srcSt==="Consignment")return o.wmsQ==null?"Consignment":o.wmsQ>=o.osN?"Siap":"Belum siap";return o.srcSt==="Stok toko"||o.srcSt==="Sudah datang sesuai qty"?"Siap":"Belum siap"}
-function fuLines(B){var out=[];B.forEach(function(n){if(n.late!=null&&n.late<=-1&&n.late>=-7)n.lines.forEach(function(o){out.push({n:n,o:o,h:-n.late,rd:readyOf(o)})})});return out}
+function fuLines(B){var out=[];B.forEach(function(n){if(n.late!=null&&n.late<=0&&n.late>=-7)n.lines.forEach(function(o){out.push({n:n,o:o,h:-n.late,rd:readyOf(o)})})});return out}
 function renderFU(all){
-  $("fuHint").textContent="Item NP dengan Promise Delivery Date 1 sampai 7 hari setelah tanggal tarik report Outstanding NP ("+fd(D.rep)+"). Pastikan barangnya siap sebelum tanggal kirim.";
-  function okDay(x){return !FU.day||x.h===FU.day}
+  $("fuHint").textContent="Item NP dengan Promise Delivery Date hari ini sampai 7 hari setelah tanggal tarik report Outstanding NP ("+fd(D.rep)+"). Pastikan barangnya siap sebelum tanggal kirim.";
+  function okDay(x){return !FU.day||(FU.day==="t"?x.h===0:x.h===FU.day)}
   function okSub(x){return !Object.keys(FU.sub).length||FU.sub[jenisOf(x.n.cm)]}
   function okType(x){return !Object.keys(FU.type).length||FU.type[x.n.t.key]}
   function okRd(x){return !Object.keys(FU.ready).length||FU.ready[x.rd]}
@@ -1128,6 +1128,7 @@ function renderFU(all){
   function tog(o,k){if(o[k])delete o[k];else o[k]=1;render()}
   var bDay=all.filter(function(x){return okSub(x)&&okType(x)&&okRd(x)&&okCat(x)});
   btn("Semua PDD",npN(bDay),!FU.day,function(){FU.day=0;render()});
+  btn("Hari ini",npN(bDay.filter(function(x){return x.h===0})),FU.day==="t",function(){FU.day=FU.day==="t"?0:"t";render()});
   for(var h=1;h<=7;h++)(function(h){btn("H-"+h,npN(bDay.filter(function(x){return x.h===h})),FU.day===h,function(){FU.day=FU.day===h?0:h;render()})})(h);
   sep();
   var bSub=all.filter(function(x){return okDay(x)&&okType(x)&&okRd(x)&&okCat(x)});
@@ -1238,20 +1239,22 @@ function fuColsOpen(e){e.stopPropagation();var b=this;if(MFP&&MFP._b===b){mfClos
 $("tabFU").onclick=function(){setView("fu")};$("tabCap").onclick=capPage;$("tabCap").style.visibility=VIEW==="det"?"":"hidden";
 $("fuReset").onclick=function(){mfClose();FU.day=0;FU.sub={};FU.type={};FU.ready={};FU.cat={};FU.cf={};render()};
 
-function vendorRows(items){var seen={},L=[];items.forEach(function(x){var o=x.o,n=x.n,ref=o.t.src==="PO"&&o.po?o.po:o.t.src==="TR"&&o.trNo?o.trNo:"-";var k=ref+"|"+o.itemNo+"|"+n.np;if(seen[k])return;seen[k]=1;
+var ALLS="OTS TR ke semua site internal";
+function siteOf(o){return norm(o.trR?(o.trR.fromC+" "+o.trR.fromN):(o.trFrom||"")).replace(/\s+/g," ")||"-"}
+function vendorRows(items,withSite){var seen={},L=[];items.forEach(function(x){var o=x.o,n=x.n,ref=o.t.src==="PO"&&o.po?o.po:o.t.src==="TR"&&o.trNo?o.trNo:"-";var k=ref+"|"+o.itemNo+"|"+n.np;if(seen[k])return;seen[k]=1;
     var qn=o.t.src==="PO"&&o.poR?num(o.poR.oq):o.t.src==="TR"&&o.trR?num(o.trR.q):o.osN;if(o.srcSt==="Partial"){var rv=o.t.src==="PO"&&o.poR?num(o.poR.rq):o.t.src==="TR"&&o.trR?num(o.trR.tiQ):0;qn=Math.max(0,qn-rv)} /* Partial: qty yang belum datang */
-    L.push([String(L.length+1),ref,o.itemNo,norm(o.item).replace(/\s+/g," "),fn(qn),n.np||"-",n.pdD?n.pdD.getDate()+" "+MN[n.pdD.getMonth()]+" "+n.pdD.getFullYear():"-"])});return L}
-function vendorName(p,brand,items){var vc={};items.forEach(function(x){var v=norm(x.o.vendor);if(v)vc[v]=(vc[v]||0)+1});return Object.keys(vc).sort(function(a,b){return vc[b]-vc[a]})[0]||p.sup||brand}
+    var row=[String(L.length+1),ref,o.itemNo,norm(o.item).replace(/\s+/g," "),fn(qn),n.np||"-",n.pdD?n.pdD.getDate()+" "+MN[n.pdD.getMonth()]+" "+n.pdD.getFullYear():"-"];if(withSite)row.splice(2,0,siteOf(o));L.push(row)});return L}
+function vendorName(p,brand,items){if(brand===ALLS)return "semua site internal (DC & cabang)";var vc={};items.forEach(function(x){var v=norm(x.o.vendor);if(v)vc[v]=(vc[v]||0)+1});return Object.keys(vc).sort(function(a,b){return vc[b]-vc[a]})[0]||p.sup||brand}
 function vendorMsg(p,brand,items){var h=new Date().getHours(),sap=h<11?"pagi":h<15?"siang":h<18?"sore":"malam";var toko=(D&&D.store?D.store:"").replace(/^\s*\d+\s*-\s*/,"").trim()||"toko kami";
   var sal=/^(BU|IBU|PAK|BPK|BAPAK|MBAK|MAS|KAK|SDR|SDRI)\b\.?/i.test(p.name)?p.name:"Bapak/Ibu "+p.name;
   return "Selamat "+sap+" "+sal+",\nKami dari "+toko+". Mohon update status pengiriman item berikut dari "+vendorName(p,brand,items)+" (daftar item pada tabel terlampir).\n\nMohon info tanggal kirim / estimasi tiba. Terima kasih."}
 function vendorTable(p,brand,items){
-  var rows=vendorRows(items),H=["No.","No. PO / TR","Item No","Item Name","QTY PO / TR","NP No.","PDD"],AL=["c","c","c","l","c","c","c"];
+  var AS=brand===ALLS,rows=vendorRows(items,AS),H=["No.","No. PO / TR","Item No","Item Name","QTY PO / TR","NP No.","PDD"],AL=["c","c","c","l","c","c","c"];if(AS){H.splice(2,0,"Dari Site");AL.splice(2,0,"l")}var NI=AS?4:3; /* kolom Item Name */
   var sc=2,pad=12,font='15px "Plus Jakarta Sans",Arial,sans-serif',bold='15px "Plus Jakarta Sans",Arial,sans-serif';
   var cv=document.createElement("canvas"),g=cv.getContext("2d");
   g.font=bold;var W=H.map(function(h){return g.measureText(h).width});g.font=font;rows.forEach(function(r){r.forEach(function(c,i){W[i]=Math.max(W[i],g.measureText(c).width)})});
   W=W.map(function(w){return Math.ceil(w+pad*2)});
-  var title=vendorName(p,brand,items);g.font='bold 17px "Plus Jakarta Sans",Arial,sans-serif';var tW=Math.ceil(g.measureText(title).width),tw0=W.reduce(function(a,b){return a+b},0);if(tW>tw0)W[3]+=tW-tw0;
+  var title=AS?"OTS TR · Semua Site Internal (DC & Cabang)":vendorName(p,brand,items);g.font='bold 17px "Plus Jakarta Sans",Arial,sans-serif';var tW=Math.ceil(g.measureText(title).width),tw0=W.reduce(function(a,b){return a+b},0);if(tW>tw0)W[NI]+=tW-tw0;
   var rh=30,th=34,tw=W.reduce(function(a,b){return a+b},0),m=16;
   cv.width=(tw+m*2)*sc;cv.height=(th+rh*(rows.length+1)+m*2)*sc;g.scale(sc,sc);
   g.fillStyle="#fff";g.fillRect(0,0,tw+m*2,th+rh*(rows.length+1)+m*2);
@@ -1294,6 +1297,9 @@ function openVendor(){
   var BR={};TRALL.forEach(function(x){var f=norm(trFromTxt(x.o)).replace(/\s+/g," ");if(!f||DCS.some(function(dc){return dc.re.test(f)}))return;(BR[f]=BR[f]||[]).push(x)});
   Object.keys(BR).sort().forEach(function(f){var it=BR[f];it.sort(function(a,b){return (a.n.pdD||0)-(b.n.pdD||0)||(a.o.trNo<b.o.trNo?-1:1)});TRC=TRC.concat(it);
     DCG.push({brand:"OTS TR ke "+f,items:it,br:1,pics:[{name:"Admin CUG",full:"Admin CUG (M10 Percetakan)",tel:"0819-9570-7204",wa:"6281995707204",sup:f,lbl:"Admin"}],seen:{}})});
+  /* WA ke semua site internal sekaligus (DC + cabang) dalam satu tabel ke Admin CUG */
+  if(TRC.length){var TA=TRC.slice().sort(function(a,b){return siteOf(a.o).localeCompare(siteOf(b.o))||(a.n.pdD||0)-(b.n.pdD||0)||(a.o.trNo<b.o.trNo?-1:1)});
+    DCG.unshift({brand:ALLS,items:TA,all:1,pics:[{name:"Admin CUG",full:"Admin CUG (M10 Percetakan)",tel:"0819-9570-7204",wa:"6281995707204",sup:"Semua site internal",lbl:"Admin"}],seen:{}})}
   var fon=!!(FU.day||Object.keys(FU.sub).length||Object.keys(FU.type).length||Object.keys(FU.cat).length||Object.keys(FU.cf||{}).some(function(c){return mfOn(FU.cf[c])}));
   G=DCG.filter(function(d){return d.items.length||(!fon&&!d.br)}).concat(G);
   var ov=el("div",{cls:"vov"}),bx=el("div",{cls:"vbox"});ov.appendChild(bx);ov.onclick=function(e){if(e.target===ov)ov.remove()};
@@ -1317,7 +1323,7 @@ function openVendor(){
             var im=el("img",{alt:"Tabel"});im.src=cv.toDataURL("image/png");im.style.cssText="max-width:100%;border:1px solid var(--line);border-radius:8px";var w=el("div",{style:"overflow:auto;max-height:60vh"});w.appendChild(im);bx.appendChild(w);
             var bt=el("div",{cls:"mfbt"}),c1=el("button",{cls:"btn",type:"button"},"📋 Salin gambar"),c2=el("button",{cls:"btn on",type:"button"},"⬇ Unduh gambar");c1.onclick=function(){copyCanvas(cv,"Tabel disalin. Tempel di WhatsApp lalu kirim.")};c2.onclick=function(){saveCanvas(cv,fname())};bt.appendChild(c1);bt.appendChild(c2);bx.appendChild(bt);document.body.appendChild(ov2)};
           var cp=el("button",{cls:"btn sm",type:"button"},"Salin tabel");cp.onclick=function(){copyCanvas(tbl(),"Tabel untuk "+p.name+" disalin sebagai gambar. Tempel di WhatsApp lalu kirim.")};
-          var dl=el("button",{cls:"btn sm",type:"button",title:"Unduh daftar item ini sebagai file Excel"},"⬇ Unduh Excel");dl.onclick=function(){var vn=vendorName(p,r.brand,r.items),rws=vendorRows(r.items);dlXlsx(["No.","No. PO / TR","Item No","Item Name","QTY PO / TR","NP No.","PDD"],rws,(vn.replace(/[\\\/\?\*\[\]:]/g," ").trim()||"Follow Up").slice(0,31),"Follow-Up-"+String(r.brand).replace(/[^A-Za-z0-9]+/g,"-")+"-"+String(p.name).replace(/[^A-Za-z0-9]+/g,"-"),dl,"item")};
+          var dl=el("button",{cls:"btn sm",type:"button",title:"Unduh daftar item ini sebagai file Excel"},"⬇ Unduh Excel");dl.onclick=function(){var vn=vendorName(p,r.brand,r.items),AS=r.brand===ALLS,rws=vendorRows(r.items,AS),hh=["No.","No. PO / TR","Item No","Item Name","QTY PO / TR","NP No.","PDD"];if(AS)hh.splice(2,0,"Dari Site");dlXlsx(hh,rws,(vn.replace(/[\\\/\?\*\[\]:]/g," ").trim()||"Follow Up").slice(0,31),"Follow-Up-"+String(r.brand).replace(/[^A-Za-z0-9]+/g,"-")+"-"+String(p.name).replace(/[^A-Za-z0-9]+/g,"-"),dl,"item")};
           if(navigator.share&&navigator.canShare){var sh=el("button",{cls:"btn sm on",type:"button",title:"Kirim gambar tabel + kata pembuka sekaligus lewat menu Bagikan (HP)"},"📤 Kirim gambar + pesan");sh.onclick=function(){tbl().toBlob(function(blob){var f=new File([blob],fname(),{type:"image/png"});var dt={files:[f],text:msgTxt};if(!navigator.canShare(dt)){toast("Perangkat ini tidak bisa membagikan gambar. Pakai ikon WA lalu tempel tabelnya.");return}copyTxt(msgTxt,"Kata pembuka juga sudah disalin.");navigator.share(dt).catch(function(e){if(e&&e.name!=="AbortError")toast("Menu Bagikan tidak tersedia di tampilan ini. Pakai ikon WA lalu tempel tabelnya.")})},"image/png")};bw.appendChild(sh)}
           bw.appendChild(pv);bw.appendChild(cp);bw.appendChild(dl);row.appendChild(bw)}c.appendChild(row)});
       list.appendChild(c)})}
@@ -1354,20 +1360,20 @@ function ensureCap(){document.querySelectorAll("#viewMain .card").forEach(functi
 var capPend=false;new MutationObserver(function(){if(capPend)return;capPend=true;requestAnimationFrame(function(){capPend=false;ensureCap()})}).observe(document.querySelector(".wrap"),{childList:true,subtree:true});
 ensureCap();
 function showCap(cv,title,natW){
-  var ov=el("div",{cls:"vov capov","data-html2canvas-ignore":"true"}),bx=el("div",{cls:"vbox",style:"width:min(1500px,100%);max-height:90vh"});ov.appendChild(bx);ov.onclick=function(e){if(e.target===ov)ov.remove()};
+  var ov=el("div",{cls:"vov capov","data-html2canvas-ignore":"true"}),bx=el("div",{cls:"vbox",style:"width:min(1500px,100%)"});var zz=parseFloat(getComputedStyle(document.body).zoom)||1;if(zz!==1)ov.style.zoom=String(1/zz); /* batalkan zoom layar besar agar jendela pas di layar */ov.appendChild(bx);ov.onclick=function(e){if(e.target===ov)ov.remove()};
   var hd=el("div",{cls:"caphd"});var b=el("b",null,"📷 Hasil Capture — "+(title||CAPLBL));hd.appendChild(b);hd.appendChild(el("span",null,"Cek dulu gambarnya, lalu salin atau simpan"));bx.appendChild(hd);
-  var pv=el("div",{cls:"capbody"}),img=el("img",{alt:"Capture"});img.src=cv.toDataURL("image/png");if(natW){img.style.width=natW+"px";img.style.maxWidth="none";img.style.margin="0"}pv.appendChild(img);bx.appendChild(pv);
+  var pv=el("div",{cls:"capbody"}),img=el("img",{alt:"Capture"});img.src=cv.toDataURL("image/png");img.title="Klik gambar untuk ukuran asli / pas layar";img.style.cursor="zoom-in";img.onclick=function(){var big=img.style.maxWidth==="none";if(big){img.style.width="";img.style.maxWidth="100%";img.style.margin="0 auto";img.style.cursor="zoom-in"}else{img.style.width=(natW||cv.width/2)+"px";img.style.maxWidth="none";img.style.margin="0";img.style.cursor="zoom-out"}};pv.appendChild(img);
   var bt=el("div",{cls:"capft"}),cp=el("button",{cls:"b1",type:"button"},"📋 Salin Gambar"),dl=el("button",{cls:"b2",type:"button"},"⬇ Simpan PNG"),cl=el("button",{cls:"b3",type:"button"},"✕ Tutup");
   cl.onclick=function(){ov.remove()};
   cp.onclick=function(){copyCanvas(cv,"Gambar disalin. Tempel (Ctrl+V) di WhatsApp atau email.")};
   dl.onclick=function(){cv.toBlob(function(blob){if(!DLNS){try{var u=URL.createObjectURL(blob),a=el("a",{href:u,download:capName(CAPLBL)});document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000)}catch(_){toast("Unduh tidak tersedia di tampilan ini. Pakai Salin gambar.")}return}DLNS.save({filename:capName(CAPLBL),data:blob}).then(function(){toast("Gambar disimpan.")},function(e){if(e&&e.code!=="declined")toast("Gagal mengunduh ("+(e&&e.code||"error")+").")})},"image/png")};
-  bt.appendChild(cp);bt.appendChild(dl);bt.appendChild(cl);bx.appendChild(bt);document.body.appendChild(ov);
+  bt.appendChild(cp);bt.appendChild(dl);bt.appendChild(cl);bx.appendChild(bt);bx.appendChild(pv);document.body.appendChild(ov); /* tombol di atas, selalu terlihat */
 }
 function stampTxt(kind){var sn=SNAPS[kind];if(!sn)return "";var st=reportStamp(sn.info);return st?st.d.getDate()+" "+MN[st.d.getMonth()]+" "+st.d.getFullYear()+(st.time?" pukul "+st.time:""):""}
-function fuFilterTxt(){var p=[];if(FU.day)p.push("PDD: H-"+FU.day);var sb=Object.keys(FU.sub);if(sb.length)p.push("Komentar: "+sb.join(", "));
+function fuFilterTxt(){var p=[];if(FU.day)p.push("PDD: "+(FU.day==="t"?"Hari ini":"H-"+FU.day));var sb=Object.keys(FU.sub);if(sb.length)p.push("Komentar: "+sb.join(", "));
   var ty=TYPES.filter(function(t){return FU.type[t.key]}).map(function(t){return t.full||t.short});if(ty.length)p.push("Tipe NP: "+ty.join(", "));var ct=Object.keys(FU.cat||{});if(ct.length)p.push("Category: "+ct.join(", "));
   var cf=FU.cf||{};Object.keys(cf).forEach(function(k){if(mfOn(cf[k])&&FUC[k])p.push(FUC[k].l+": "+cf[k].join(", "))});
-  return p.length?"Filter: "+p.join(" | "):"Filter: tidak ada (semua item H-1 sampai H-7)"}
+  return p.length?"Filter: "+p.join(" | "):"Filter: tidak ada (semua item hari ini sampai H-7)"}
 var FU_RINGKAS=["pdd","sales","np","cust","item","iname","vendor","ref","oq","rq","ket","os","nav","wms"];
 function capFU(btn,keys){var lbl0=btn.textContent;
   if(typeof html2canvas==="undefined"){toast("Fitur capture belum termuat. Coba muat ulang halaman.");return}
